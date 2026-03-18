@@ -1,0 +1,6 @@
+{
+    "low_humidity":35,
+    "high_humidity": 75,
+    "light_alert": 20,
+    "water_level_low": 15
+}

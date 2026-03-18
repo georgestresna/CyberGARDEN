@@ -1,0 +1,127 @@
+[
+    {
+        "temp": 29,
+        "humidity": 59,
+        "water_level": 80
+    },
+    {
+        "temp": 27,
+        "humidity": 51,
+        "water_level": 29
+    },
+    {
+        "temp": 27,
+        "humidity": 39,
+        "water_level": 68
+    },
+    {
+        "temp": 18,
+        "humidity": 41,
+        "water_level": 24
+    },
+    {
+        "temp": 21,
+        "humidity": 32,
+        "water_level": 56
+    },
+    {
+        "temp": 22,
+        "humidity": 45,
+        "water_level": 22
+    },
+    {
+        "temp": 21,
+        "humidity": 46,
+        "water_level": 12
+    },
+    {
+        "temp": 30,
+        "humidity": 47,
+        "water_level": 15
+    },
+    {
+        "temp": 21,
+        "humidity": 37,
+        "water_level": 100
+    },
+    {
+        "temp": 19,
+        "humidity": 30,
+        "water_level": 98
+    },
+    {
+        "temp": 20,
+        "humidity": 43,
+        "water_level": 72
+    },
+    {
+        "temp": 30,
+        "humidity": 32,
+        "water_level": 99
+    },
+    {
+        "temp": 21,
+        "humidity": 58,
+        "water_level": 57
+    },
+    {
+        "temp": 30,
+        "humidity": 31,
+        "water_level": 24
+    },
+    {
+        "temp": 16,
+        "humidity": 36,
+        "water_level": 32
+    },
+    {
+        "temp": 15,
+        "humidity": 32,
+        "water_level": 41
+    },
+    {
+        "temp": 19,
+        "humidity": 35,
+        "water_level": 65
+    },
+    {
+        "temp": 18,
+        "humidity": 30,
+        "water_level": 31
+    },
+    {
+        "temp": 25,
+        "humidity": 40,
+        "water_level": 34
+    },
+    {
+        "temp": 29,
+        "humidity": 59,
+        "water_level": 98
+    },
+    {
+        "temp": 28,
+        "humidity": 35,
+        "water_level": 77
+    },
+    {
+        "temp": 18,
+        "humidity": 55,
+        "water_level": 36
+    },
+    {
+        "temp": 23,
+        "humidity": 57,
+        "water_level": 43
+    },
+    {
+        "temp": 27,
+        "humidity": 39,
+        "water_level": 65
+    },
+    {
+        "temp": 15,
+        "humidity": 31,
+        "water_level": 61
+    }
+]

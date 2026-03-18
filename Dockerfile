@@ -1,3 +1,4 @@
+## DOCKER FOR THE PIPELINE OF DATA
 FROM python:3.12-slim
 
 WORKDIR /app
