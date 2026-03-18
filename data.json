@@ -1,0 +1,37 @@
+[
+    {
+        "temp": 10,
+        "humidity": 25,
+        "water_level": 25
+    },
+    {
+        "temp": 15,
+        "humidity": 30,
+        "water_level": 20
+    },
+    {
+        "temp": 18,
+        "humidity": 32,
+        "water_level": 18
+    },
+    {
+        "temp": 21,
+        "humidity": 35,
+        "water_level": 15
+    },
+    {
+        "temp": 23,
+        "humidity": 38,
+        "water_level": 12
+    },
+    {
+        "temp": 25,
+        "humidity": 40,
+        "water_level": 8
+    },
+    {
+        "temp": 24,
+        "humidity": 42,
+        "water_level": 5
+    }
+]
