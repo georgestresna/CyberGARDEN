@@ -1,27 +1,43 @@
 
 services:
+  mosquitto:
+    image: eclipse-mosquitto:2.0
+    container_name: mosquitto
+    restart: unless-stopped
+    ports:
+      - "1883:1883"
+    volumes:
+      - ./mosquitto/config:/mosquitto/config
+    deploy:
+      resources:
+        limits:
+          memory: 50M
   web:
     build: .
     container_name: web
-    command: uvicorn backend.app:app --host 0.0.0.0 --port 8000 --reload
+    command: uvicorn backend.app:app --host 0.0.0.0 --port 8000
     ports:
       - "8000:8000"
     volumes:
       - ./db:/db
+    depends_on:
+      - mosquitto
 
   receiver:
     build: .
     container_name: receiver
     restart: unless-stopped
-    command: uvicorn receiver.receiver:app --host 0.0.0.0 --port 8001 --reload
+    command: uvicorn receiver.receiver:app --host 0.0.0.0 --port 8001
     ports:
       - "8001:8001"
     volumes:
       - ./db:/db
+    depends_on:
+      - mosquitto
 
   stm32:
     build: ./stm32
     container_name: stm32
     restart: unless-stopped
     depends_on:
-      - receiver
+      - mosquitto
