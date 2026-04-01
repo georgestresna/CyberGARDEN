@@ -1,6 +1,6 @@
 
 services:
-  api_web:
+  web:
     build: .
     container_name: web
     command: uvicorn backend.app:app --host 0.0.0.0 --port 8000 --reload
@@ -9,9 +9,9 @@ services:
     volumes:
       - ./db:/db
 
-  api_hw:
+  receiver:
     build: .
-    container_name: api_hw
+    container_name: receiver
     restart: unless-stopped
     command: uvicorn receiver.receiver:app --host 0.0.0.0 --port 8001 --reload
     ports:
@@ -24,4 +24,4 @@ services:
     container_name: stm32
     restart: unless-stopped
     depends_on:
-      - api_hw
+      - receiver

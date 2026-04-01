@@ -2,7 +2,7 @@ import time
 import random
 import requests
 
-BRAIN_URL = "http://api_hw:8001/"
+BRAIN_URL = "http://receiver:8001/"
 
 time.sleep(5)
 print("Started serre databus")
