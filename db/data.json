@@ -343,5 +343,230 @@
         "temp": 29,
         "humidity": 42,
         "water_level": 38
+    },
+    {
+        "temp": 19,
+        "humidity": 32,
+        "water_level": 49
+    },
+    {
+        "temp": 18,
+        "humidity": 44,
+        "water_level": 67
+    },
+    {
+        "temp": 28,
+        "humidity": 51,
+        "water_level": 74
+    },
+    {
+        "temp": 27,
+        "humidity": 52,
+        "water_level": 52
+    },
+    {
+        "temp": 24,
+        "humidity": 47,
+        "water_level": 62
+    },
+    {
+        "temp": 22,
+        "humidity": 35,
+        "water_level": 76
+    },
+    {
+        "temp": 21,
+        "humidity": 30,
+        "water_level": 15
+    },
+    {
+        "temp": 18,
+        "humidity": 53,
+        "water_level": 16
+    },
+    {
+        "temp": 26,
+        "humidity": 36,
+        "water_level": 21
+    },
+    {
+        "temp": 27,
+        "humidity": 30,
+        "water_level": 74
+    },
+    {
+        "temp": 17,
+        "humidity": 33,
+        "water_level": 99
+    },
+    {
+        "temp": 29,
+        "humidity": 50,
+        "water_level": 24
+    },
+    {
+        "temp": 22,
+        "humidity": 39,
+        "water_level": 92
+    },
+    {
+        "temp": 29,
+        "humidity": 45,
+        "water_level": 34
+    },
+    {
+        "temp": 29,
+        "humidity": 51,
+        "water_level": 49
+    },
+    {
+        "temp": 26,
+        "humidity": 33,
+        "water_level": 15
+    },
+    {
+        "temp": 15,
+        "humidity": 38,
+        "water_level": 84
+    },
+    {
+        "temp": 23,
+        "humidity": 33,
+        "water_level": 22
+    },
+    {
+        "temp": 28,
+        "humidity": 55,
+        "water_level": 30
+    },
+    {
+        "temp": 18,
+        "humidity": 45,
+        "water_level": 68
+    },
+    {
+        "temp": 19,
+        "humidity": 38,
+        "water_level": 5
+    },
+    {
+        "temp": 22,
+        "humidity": 57,
+        "water_level": 79
+    },
+    {
+        "temp": 17,
+        "humidity": 38,
+        "water_level": 70
+    },
+    {
+        "temp": 25,
+        "humidity": 47,
+        "water_level": 24
+    },
+    {
+        "temp": 22,
+        "humidity": 57,
+        "water_level": 96
+    },
+    {
+        "temp": 19,
+        "humidity": 48,
+        "water_level": 77
+    },
+    {
+        "temp": 21,
+        "humidity": 40,
+        "water_level": 83
+    },
+    {
+        "temp": 23,
+        "humidity": 46,
+        "water_level": 43
+    },
+    {
+        "temp": 18,
+        "humidity": 36,
+        "water_level": 76
+    },
+    {
+        "temp": 26,
+        "humidity": 45,
+        "water_level": 16
+    },
+    {
+        "temp": 30,
+        "humidity": 30,
+        "water_level": 29
+    },
+    {
+        "temp": 21,
+        "humidity": 36,
+        "water_level": 80
+    },
+    {
+        "temp": 16,
+        "humidity": 60,
+        "water_level": 96
+    },
+    {
+        "temp": 26,
+        "humidity": 56,
+        "water_level": 65
+    },
+    {
+        "temp": 18,
+        "humidity": 38,
+        "water_level": 37
+    },
+    {
+        "temp": 27,
+        "humidity": 58,
+        "water_level": 49
+    },
+    {
+        "temp": 27,
+        "humidity": 51,
+        "water_level": 15
+    },
+    {
+        "temp": 26,
+        "humidity": 50,
+        "water_level": 25
+    },
+    {
+        "temp": 30,
+        "humidity": 40,
+        "water_level": 74
+    },
+    {
+        "temp": 28,
+        "humidity": 45,
+        "water_level": 42
+    },
+    {
+        "temp": 28,
+        "humidity": 47,
+        "water_level": 6
+    },
+    {
+        "temp": 29,
+        "humidity": 42,
+        "water_level": 39
+    },
+    {
+        "temp": 20,
+        "humidity": 53,
+        "water_level": 57
+    },
+    {
+        "temp": 27,
+        "humidity": 52,
+        "water_level": 56
+    },
+    {
+        "temp": 28,
+        "humidity": 38,
+        "water_level": 99
     }
 ]
