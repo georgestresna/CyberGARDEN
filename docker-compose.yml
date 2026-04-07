@@ -27,9 +27,7 @@ services:
     build: .
     container_name: receiver
     restart: unless-stopped
-    command: uvicorn receiver.receiver:app --host 0.0.0.0 --port 8001
-    ports:
-      - "8001:8001"
+    command: python3 -u receiver/receiver.py
     volumes:
       - ./db:/db
     depends_on:

@@ -48,7 +48,7 @@ def on_message(client, userdata, msg):
             db_list = json.load(f)
         db_list.append(data)
         with open("/db/data.json", "w") as f:
-            f.write(json.dump(db_list, f))
+            json.dump(db_list, f, indent=4)
     except Exception as e:
         print(f"❌ Error writing to DB: {e}")
 
