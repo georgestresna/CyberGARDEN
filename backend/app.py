@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse, HTMLResponse
 from fastapi.templating import Jinja2Templates
+import paho.mqtt.publish as publish
 import json
 import os
 
@@ -25,3 +26,24 @@ async def root(request: Request):
         return JSONResponse(data)
 
     return templates.TemplateResponse(request=request, name="index.html", context={"request": request, "data": data})
+
+@app.post("/api/command/pump")
+async def control_pump(request: Request):
+    try:
+        # 1. Get the requested state from the HTML button (1 or 0)
+        payload = await request.json()
+        target_state = payload.get("state", 1) 
+        
+        # 2. Convert to string because MQTT payloads must be strings/bytes
+        mqtt_payload = str(target_state)
+
+        # 3. Publish to Mosquitto
+        publish.single(
+            topic="cybergarden/commands/pump",
+            payload=mqtt_payload,
+            hostname="mosquitto", 
+            port=1883
+        )
+        return {"status": "success", "state": target_state}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}

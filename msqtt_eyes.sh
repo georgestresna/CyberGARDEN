@@ -1,0 +1,1 @@
+docker exec -it mosquitto mosquitto_sub -h localhost -t "#" -v
