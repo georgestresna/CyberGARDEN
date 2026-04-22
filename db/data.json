@@ -1907,5 +1907,453 @@
         "humidity": 60,
         "water_level": 18,
         "pump_state": 1
+    },
+    {
+        "temp": 28.4,
+        "humidity": 59,
+        "water_level": 57,
+        "pump_state": 0,
+        "timestamp": "2026-04-22 06:26:50"
+    },
+    {
+        "temp": 28.4,
+        "humidity": 46,
+        "water_level": 60,
+        "pump_state": 0,
+        "timestamp": "2026-04-22 06:27:02"
+    },
+    {
+        "temp": 21.3,
+        "humidity": 52,
+        "water_level": 30,
+        "pump_state": 0,
+        "timestamp": "2026-04-22 06:27:12"
+    },
+    {
+        "temp": 25.7,
+        "humidity": 43,
+        "water_level": 62,
+        "pump_state": 0,
+        "timestamp": "2026-04-22 06:27:22"
+    },
+    {
+        "temp": 20.3,
+        "humidity": 58,
+        "water_level": 11,
+        "pump_state": 0,
+        "timestamp": "2026-04-22 06:27:34"
+    },
+    {
+        "temp": 24.6,
+        "humidity": 58,
+        "water_level": 80,
+        "pump_state": 0,
+        "timestamp": "2026-04-22 06:27:44"
+    },
+    {
+        "temp": 23.5,
+        "humidity": 50,
+        "water_level": 71,
+        "pump_state": 0,
+        "timestamp": "2026-04-22 06:27:54"
+    },
+    {
+        "temp": 21.0,
+        "humidity": 51,
+        "water_level": 45,
+        "pump_state": 0,
+        "timestamp": "2026-04-22 06:28:05"
+    },
+    {
+        "temp": 29.3,
+        "humidity": 46,
+        "water_level": 47,
+        "pump_state": 0,
+        "timestamp": "2026-04-22 06:28:15"
+    },
+    {
+        "temp": 29.5,
+        "humidity": 51,
+        "water_level": 11,
+        "pump_state": 0,
+        "timestamp": "2026-04-22 06:28:25"
+    },
+    {
+        "temp": 23.0,
+        "humidity": 53,
+        "water_level": 13,
+        "pump_state": 0,
+        "timestamp": "2026-04-22 06:28:35"
+    },
+    {
+        "temp": 20.4,
+        "humidity": 50,
+        "water_level": 33,
+        "pump_state": 0,
+        "timestamp": "2026-04-22 06:28:47"
+    },
+    {
+        "temp": 26.8,
+        "humidity": 57,
+        "water_level": 46,
+        "pump_state": 0,
+        "timestamp": "2026-04-22 06:28:57"
+    },
+    {
+        "temp": 22.3,
+        "humidity": 57,
+        "water_level": 54,
+        "pump_state": 0,
+        "timestamp": "2026-04-22 06:29:07"
+    },
+    {
+        "temp": 23.1,
+        "humidity": 46,
+        "water_level": 40,
+        "pump_state": 0,
+        "timestamp": "2026-04-22 06:29:18"
+    },
+    {
+        "temp": 21.4,
+        "humidity": 41,
+        "water_level": 32,
+        "pump_state": 0,
+        "timestamp": "2026-04-22 06:29:28"
+    },
+    {
+        "temp": 23.8,
+        "humidity": 41,
+        "water_level": 44,
+        "pump_state": 0,
+        "timestamp": "2026-04-22 06:29:38"
+    },
+    {
+        "temp": 28.4,
+        "humidity": 55,
+        "water_level": 40,
+        "pump_state": 1,
+        "timestamp": "2026-04-22 06:29:50"
+    },
+    {
+        "temp": 21.7,
+        "humidity": 42,
+        "water_level": 80,
+        "pump_state": 0,
+        "timestamp": "2026-04-22 06:30:00"
+    },
+    {
+        "temp": 28.9,
+        "humidity": 42,
+        "water_level": 24,
+        "pump_state": 0,
+        "timestamp": "2026-04-22 06:30:10"
+    },
+    {
+        "temp": 25.5,
+        "humidity": 47,
+        "water_level": 55,
+        "pump_state": 0,
+        "timestamp": "2026-04-22 06:30:21"
+    },
+    {
+        "temp": 27.3,
+        "humidity": 54,
+        "water_level": 37,
+        "pump_state": 0,
+        "timestamp": "2026-04-22 06:30:31"
+    },
+    {
+        "temp": 28.0,
+        "humidity": 46,
+        "water_level": 36,
+        "pump_state": 0,
+        "timestamp": "2026-04-22 06:30:41"
+    },
+    {
+        "temp": 23.8,
+        "humidity": 57,
+        "water_level": 16,
+        "pump_state": 0,
+        "timestamp": "2026-04-22 06:30:53"
+    },
+    {
+        "temp": 23.9,
+        "humidity": 46,
+        "water_level": 85,
+        "pump_state": 0,
+        "timestamp": "2026-04-22 06:31:03"
+    },
+    {
+        "temp": 29.8,
+        "humidity": 56,
+        "water_level": 86,
+        "pump_state": 0,
+        "timestamp": "2026-04-22 06:31:13"
+    },
+    {
+        "temp": 23.1,
+        "humidity": 60,
+        "water_level": 37,
+        "pump_state": 0,
+        "timestamp": "2026-04-22 06:31:23"
+    },
+    {
+        "temp": 25.3,
+        "humidity": 52,
+        "water_level": 29,
+        "pump_state": 0,
+        "timestamp": "2026-04-22 06:31:35"
+    },
+    {
+        "temp": 25.6,
+        "humidity": 41,
+        "water_level": 31,
+        "pump_state": 0,
+        "timestamp": "2026-04-22 06:31:45"
+    },
+    {
+        "temp": 27.0,
+        "humidity": 53,
+        "water_level": 27,
+        "pump_state": 0,
+        "timestamp": "2026-04-22 06:31:55"
+    },
+    {
+        "temp": 24.9,
+        "humidity": 46,
+        "water_level": 87,
+        "pump_state": 0,
+        "timestamp": "2026-04-22 06:32:06"
+    },
+    {
+        "temp": 24.9,
+        "humidity": 47,
+        "water_level": 82,
+        "pump_state": 0,
+        "timestamp": "2026-04-22 06:32:16"
+    },
+    {
+        "temp": 22.0,
+        "humidity": 54,
+        "water_level": 55,
+        "pump_state": 0,
+        "timestamp": "2026-04-22 06:32:26"
+    },
+    {
+        "temp": 24.0,
+        "humidity": 48,
+        "water_level": 81,
+        "pump_state": 0,
+        "timestamp": "2026-04-22 06:32:38"
+    },
+    {
+        "temp": 28.7,
+        "humidity": 49,
+        "water_level": 31,
+        "pump_state": 0,
+        "timestamp": "2026-04-22 06:32:48"
+    },
+    {
+        "temp": 28.6,
+        "humidity": 56,
+        "water_level": 43,
+        "pump_state": 0,
+        "timestamp": "2026-04-22 06:32:58"
+    },
+    {
+        "temp": 27.3,
+        "humidity": 47,
+        "water_level": 30,
+        "pump_state": 0,
+        "timestamp": "2026-04-22 06:33:09"
+    },
+    {
+        "temp": 28.7,
+        "humidity": 53,
+        "water_level": 59,
+        "pump_state": 0,
+        "timestamp": "2026-04-22 06:33:19"
+    },
+    {
+        "temp": 20.9,
+        "humidity": 49,
+        "water_level": 32,
+        "pump_state": 0,
+        "timestamp": "2026-04-22 06:33:29"
+    },
+    {
+        "temp": 26.6,
+        "humidity": 57,
+        "water_level": 75,
+        "pump_state": 0,
+        "timestamp": "2026-04-22 06:33:39"
+    },
+    {
+        "temp": 28.7,
+        "humidity": 59,
+        "water_level": 80,
+        "pump_state": 0,
+        "timestamp": "2026-04-22 06:33:51"
+    },
+    {
+        "temp": 29.3,
+        "humidity": 59,
+        "water_level": 58,
+        "pump_state": 0,
+        "timestamp": "2026-04-22 06:34:01"
+    },
+    {
+        "temp": 28.4,
+        "humidity": 53,
+        "water_level": 80,
+        "pump_state": 0,
+        "timestamp": "2026-04-22 06:34:11"
+    },
+    {
+        "temp": 27.7,
+        "humidity": 59,
+        "water_level": 30,
+        "pump_state": 0,
+        "timestamp": "2026-04-22 06:34:23"
+    },
+    {
+        "temp": 21.8,
+        "humidity": 41,
+        "water_level": 22,
+        "pump_state": 0,
+        "timestamp": "2026-04-22 06:34:33"
+    },
+    {
+        "temp": 29.7,
+        "humidity": 56,
+        "water_level": 23,
+        "pump_state": 0,
+        "timestamp": "2026-04-22 06:34:43"
+    },
+    {
+        "temp": 22.7,
+        "humidity": 54,
+        "water_level": 43,
+        "pump_state": 0,
+        "timestamp": "2026-04-22 06:34:54"
+    },
+    {
+        "temp": 24.7,
+        "humidity": 43,
+        "water_level": 13,
+        "pump_state": 0,
+        "timestamp": "2026-04-22 06:35:04"
+    },
+    {
+        "temp": 28.1,
+        "humidity": 53,
+        "water_level": 12,
+        "pump_state": 0,
+        "timestamp": "2026-04-22 06:35:14"
+    },
+    {
+        "temp": 20.5,
+        "humidity": 53,
+        "water_level": 23,
+        "pump_state": 0,
+        "timestamp": "2026-04-22 06:35:26"
+    },
+    {
+        "temp": 28.0,
+        "humidity": 51,
+        "water_level": 80,
+        "pump_state": 0,
+        "timestamp": "2026-04-22 06:35:36"
+    },
+    {
+        "temp": 29.6,
+        "humidity": 42,
+        "water_level": 84,
+        "pump_state": 0,
+        "timestamp": "2026-04-22 06:35:46"
+    },
+    {
+        "temp": 22.5,
+        "humidity": 52,
+        "water_level": 43,
+        "pump_state": 0,
+        "timestamp": "2026-04-22 06:35:57"
+    },
+    {
+        "temp": 21.2,
+        "humidity": 58,
+        "water_level": 72,
+        "pump_state": 0,
+        "timestamp": "2026-04-22 06:36:07"
+    },
+    {
+        "temp": 27.1,
+        "humidity": 40,
+        "water_level": 31,
+        "pump_state": 0,
+        "timestamp": "2026-04-22 06:36:17"
+    },
+    {
+        "temp": 29.3,
+        "humidity": 43,
+        "water_level": 61,
+        "pump_state": 0,
+        "timestamp": "2026-04-22 06:36:27"
+    },
+    {
+        "temp": 28.7,
+        "humidity": 44,
+        "water_level": 85,
+        "pump_state": 0,
+        "timestamp": "2026-04-22 06:36:39"
+    },
+    {
+        "temp": 28.3,
+        "humidity": 45,
+        "water_level": 20,
+        "pump_state": 0,
+        "timestamp": "2026-04-22 06:36:49"
+    },
+    {
+        "temp": 23.3,
+        "humidity": 56,
+        "water_level": 82,
+        "pump_state": 0,
+        "timestamp": "2026-04-22 06:36:59"
+    },
+    {
+        "temp": 28.1,
+        "humidity": 41,
+        "water_level": 21,
+        "pump_state": 0,
+        "timestamp": "2026-04-22 06:37:10"
+    },
+    {
+        "temp": 27.6,
+        "humidity": 60,
+        "water_level": 67,
+        "pump_state": 0,
+        "timestamp": "2026-04-22 06:37:20"
+    },
+    {
+        "temp": 22.1,
+        "humidity": 50,
+        "water_level": 76,
+        "pump_state": 0,
+        "timestamp": "2026-04-22 06:37:30"
+    },
+    {
+        "temp": 24.5,
+        "humidity": 48,
+        "water_level": 19,
+        "pump_state": 0,
+        "timestamp": "2026-04-22 06:37:42"
+    },
+    {
+        "temp": 22.2,
+        "humidity": 51,
+        "water_level": 69,
+        "pump_state": 0,
+        "timestamp": "2026-04-22 06:37:52"
     }
 ]

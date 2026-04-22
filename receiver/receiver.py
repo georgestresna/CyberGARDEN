@@ -1,5 +1,6 @@
 import json
 import paho.mqtt.client as mqtt
+from datetime import datetime
 
 ###
 DATA_FILE = "/db/data.json"
@@ -11,6 +12,7 @@ TOPIC = "cybergarden/sensors"
 def on_message(client, userdata, msg):
     payload = msg.payload.decode()
     data = json.loads(payload)
+    data["timestamp"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     
     try:
         with open(DATA_FILE, "r") as f:

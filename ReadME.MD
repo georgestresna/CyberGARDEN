@@ -6,6 +6,6 @@ In another terminal while the docker infrastructure is active and working:
 3. chmod +x ./msqtt_eyes.sh
 4. ./msqtt_eyes.sh
 
-(captures broker messages, aka wee can visualies what informasion is passed where and when)
+(captures broker messages, aka we can visualise what information is passed, when and where)
 
-reminder for me: capture time of data transmission in the database also
+To add: Ajax/ WebSockets for the latest state of the button (+latest info)
