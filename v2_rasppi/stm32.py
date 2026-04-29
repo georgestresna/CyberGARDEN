@@ -9,7 +9,8 @@ BROKER = "13.63.71.56"
 PORT = 1883
 TOPIC = "cybergarden/sensors"
 
-client = mqtt.Client("PiMockSender") 
+client = mqtt.Client("PiMockSender")
+# client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2, "MockSTM32") 
 
 def try_connection():
     try:
@@ -38,7 +39,7 @@ try:
         result = client.publish(TOPIC, json_payload)
 
         status = result[0]
-        if status:
+        if not status:
             print("Data created & published")
         else:
             print("Data created but couldn t be published | trying to reconnect before sending next batch")
