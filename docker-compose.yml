@@ -1,41 +1,54 @@
-
 services:
   mosquitto:
     image: eclipse-mosquitto:2.0
     container_name: mosquitto
     restart: unless-stopped
     ports:
-      - "1883:1883"
+      - "1883:1883"    # ouvert publiquement pour recevoir le Pi
     volumes:
       - ./mosquitto/config:/mosquitto/config
+
+  mongodb:
+    image: mongo:7
+    container_name: mongodb
+    restart: unless-stopped
+    volumes:
+      - ./mongo-data:/data/db
     deploy:
       resources:
         limits:
-          memory: 50M
-  web:
-    build: .
-    container_name: web
-    command: uvicorn backend.app:app --host 0.0.0.0 --port 8000
-    ports:
-      - "8000:8000"
-    volumes:
-      - ./db:/db
-    depends_on:
-      - mosquitto
+          memory: 150M
 
   receiver:
     build: .
     container_name: receiver
     restart: unless-stopped
-    command: python3 -u receiver/receiver.py
-    volumes:
-      - ./db:/db
+    command: python receiver/receiver.py
+    environment:
+      - MONGO_URL=mongodb://mongodb:27017
+      - MQTT_HOST=mosquitto
     depends_on:
       - mosquitto
+      - mongodb
+    deploy:
+      resources:
+        limits:
+          memory: 80M
 
-  stm32:
-    build: ./stm32
-    container_name: stm32
+  web:
+    build: .
+    container_name: web
     restart: unless-stopped
+    command: uvicorn backend.app:app --host 0.0.0.0 --port 8000 --workers 1
+    ports:
+      - "8000:8000"
+    environment:
+      - MONGO_URL=mongodb://mongodb:27017
+      - MQTT_HOST=mosquitto
     depends_on:
+      - mongodb
       - mosquitto
+    deploy:
+      resources:
+        limits:
+          memory: 100M
