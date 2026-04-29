@@ -9,3 +9,6 @@ In another terminal while the docker infrastructure is active and working:
 (captures broker messages, aka we can visualise what information is passed, when and where)
 
 To add: Ajax/ WebSockets for the latest state of the button (+latest info)
+
+
+port 1883 is plain text - not secure, port 8883 is over a ssl/tcl certificate. 
