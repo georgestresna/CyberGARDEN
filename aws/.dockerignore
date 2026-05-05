@@ -1,0 +1,4 @@
+mongo-data/
+mosquitto/
+.git/
+__pycache__/

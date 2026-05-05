@@ -1,0 +1,9 @@
+services:
+  gateway:
+    build: ./gateway
+    container_name: gateway
+    restart: unless-stopped
+    privileged: true         # Required to access hardware antennas
+    network_mode: "host"     # Shares the Pi's Bluetooth/Wifi network directly
+    environment:
+      - AWS_BROKER=13.63.71.56

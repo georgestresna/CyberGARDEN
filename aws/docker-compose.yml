@@ -1,0 +1,54 @@
+services:
+  mosquitto:
+    image: eclipse-mosquitto:2.0
+    container_name: mosquitto
+    restart: unless-stopped
+    ports:
+      - "1883:1883"
+    volumes:
+      - ./mosquitto/config:/mosquitto/config
+
+  mongodb:
+    image: mongo:7
+    container_name: mongodb
+    restart: unless-stopped
+    logging:
+      driver: "none"
+    volumes:
+      - ./mongo-data:/data/db
+    deploy:
+      resources:
+        limits:
+          memory: 450M
+
+  receiver:
+    build: ./receiver
+    container_name: receiver
+    restart: unless-stopped
+    environment:
+      - MONGO_URL=mongodb://mongodb:27017
+      - MQTT_HOST=mosquitto
+    depends_on:
+      - mosquitto
+      - mongodb
+    deploy:
+      resources:
+        limits:
+          memory: 100M
+
+  web:
+    build: ./web
+    container_name: web
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - MONGO_URL=mongodb://mongodb:27017
+      - MQTT_HOST=mosquitto
+    depends_on:
+      - mongodb
+      - mosquitto
+    deploy:
+      resources:
+        limits:
+          memory: 150M
