@@ -1,0 +1,887 @@
+/* ================================================================
+   CYBER-GARDEN — dashboard.css
+   Tous les styles visuels du dashboard.
+   Ne contient aucune donnée, aucune logique JS.
+================================================================ */
+
+/* ================================================================
+   1. DESIGN TOKENS
+   Modifier ces variables pour changer le thème global.
+================================================================ */
+:root {
+  /* Arrière-plans */
+  --bg-page:        #0f1410;
+  --bg-card:        #161c18;
+  --bg-card-hover:  #1c2520;
+  --bg-inset:       #0b0f0d;
+
+  /* Bordures */
+  --border:         rgba(255, 255, 255, 0.07);
+  --border-strong:  rgba(255, 255, 255, 0.13);
+
+  /* Palette verte (accent principal) */
+  --green-bright:   #7dce5f;
+  --green-mid:      #4a9e30;
+  --green-dim:      #2a5a1c;
+  --green-glow:     rgba(125, 206, 95, 0.12);
+
+  /* Palette ambre (avertissement) */
+  --amber:          #e8a234;
+  --amber-dim:      rgba(232, 162, 52, 0.15);
+
+  /* Palette bleue (info / eau) */
+  --blue:           #5ba3e0;
+  --blue-dim:       rgba(91, 163, 224, 0.15);
+
+  /* Palette rouge (alerte) */
+  --red:            #e05b5b;
+  --red-dim:        rgba(224, 91, 91, 0.15);
+
+  /* Textes */
+  --text-primary:   #e8ede6;
+  --text-secondary: #7a9070;
+  --text-dim:       #445540;
+
+  /* Typographie */
+  --font-ui:   'DM Sans', sans-serif;
+  --font-mono: 'DM Mono', monospace;
+
+  /* Rayons */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+}
+
+
+/* ================================================================
+   2. RESET & BASE
+================================================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-ui);
+  background: var(--bg-page);
+  color: var(--text-primary);
+  min-height: 100vh;
+  padding: 20px;
+  background-image:
+    radial-gradient(circle at 20% 20%, rgba(74, 158, 48, 0.04) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(91, 163, 224, 0.03) 0%, transparent 50%);
+}
+
+
+/* ================================================================
+   3. LAYOUT PRINCIPAL
+================================================================ */
+.dashboard {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+
+/* ================================================================
+   4. TOPBAR
+================================================================ */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 22px 20px 18px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+
+.topbar-center {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.logo {
+  width: 44px;
+  height: 44px;
+  background: var(--green-dim);
+  border: 1px solid var(--green-mid);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+}
+
+.site-title {
+  font-size: 36px;
+  font-weight: 300;
+  letter-spacing: 0.04em;
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.site-title span {
+  color: var(--green-bright);
+  font-weight: 500;
+}
+
+
+/* ================================================================
+   5. GRILLE MÉTRIQUES
+================================================================ */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.metric-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 16px 18px 14px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.2s, background 0.2s;
+  cursor: default;
+}
+
+.metric-card:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-strong);
+}
+
+/* Barre colorée en haut — couleur définie via --card-accent en JS */
+.metric-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--card-accent, var(--green-mid));
+}
+
+.metric-label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 10px;
+}
+
+.metric-value-row {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.metric-value {
+  font-size: 32px;
+  font-weight: 300;
+  font-family: var(--font-mono);
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.metric-unit {
+  font-size: 14px;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+}
+
+.metric-badge {
+  display: inline-block;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-family: var(--font-mono);
+  font-weight: 500;
+}
+
+.badge-ok {
+  background: var(--green-glow);
+  color: var(--green-bright);
+  border: 1px solid var(--green-dim);
+}
+
+.badge-warn {
+  background: var(--amber-dim);
+  color: var(--amber);
+  border: 1px solid rgba(232, 162, 52, 0.3);
+}
+
+.badge-alert {
+  background: var(--red-dim);
+  color: var(--red);
+  border: 1px solid rgba(224, 91, 91, 0.3);
+}
+
+.metric-trend {
+  font-size: 11px;
+  color: var(--text-dim);
+  font-family: var(--font-mono);
+  margin-top: 6px;
+}
+
+
+/* ================================================================
+   6. LIGNE PRINCIPALE : graphique + actionneurs
+================================================================ */
+.main-row {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 12px;
+}
+
+
+/* ================================================================
+   7. CARTE GRAPHIQUE
+================================================================ */
+.chart-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 18px 20px;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.card-title {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.card-subtitle {
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+/* Onglets 6h / 24h / 7j */
+.tab-group {
+  display: flex;
+  gap: 4px;
+  background: var(--bg-inset);
+  padding: 3px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+}
+
+.tab-btn {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 4px;
+  border: none;
+  background: transparent;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.tab-btn.active {
+  background: var(--green-dim);
+  color: var(--green-bright);
+}
+
+.tab-btn:hover:not(.active) {
+  color: var(--text-secondary);
+}
+
+/* Canvas Chart.js */
+.chart-wrap {
+  position: relative;
+  height: 180px;
+}
+
+/* Légende */
+.chart-legend {
+  display: flex;
+  gap: 16px;
+  margin-top: 10px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+}
+
+.legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+
+/* ================================================================
+   8. CARTE ACTIONNEURS
+================================================================ */
+.actions-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.action-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.action-row:last-of-type {
+  border-bottom: none;
+}
+
+.action-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.action-sub {
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  margin-top: 2px;
+}
+
+/* Toggle switch */
+.toggle-wrap {
+  position: relative;
+  width: 36px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.toggle-wrap input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+
+.toggle-track {
+  position: absolute;
+  inset: 0;
+  border-radius: 10px;
+  background: var(--bg-inset);
+  border: 1px solid var(--border-strong);
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.toggle-wrap input:checked + .toggle-track {
+  background: var(--green-dim);
+  border-color: var(--green-mid);
+}
+
+.toggle-track::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--text-dim);
+  transition: transform 0.2s, background 0.2s;
+}
+
+.toggle-wrap input:checked + .toggle-track::after {
+  transform: translateX(16px);
+  background: var(--green-bright);
+}
+
+
+/* ================================================================
+   9. BOUTON ARROSAGE IMPULSION
+================================================================ */
+.pulse-section {
+  padding: 12px 0 4px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 4px;
+}
+
+.pulse-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 11px 0;
+  background: var(--blue-dim);
+  border: 1px solid var(--blue);
+  border-radius: var(--radius-md);
+  color: var(--blue);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  letter-spacing: 0.03em;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.pulse-btn:hover:not(:disabled) {
+  background: rgba(91, 163, 224, 0.25);
+  border-color: #7fc0ee;
+}
+
+.pulse-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pulse-btn.active {
+  background: rgba(91, 163, 224, 0.3);
+  border-color: #7fc0ee;
+  color: #8ecff5;
+  animation: pulse-glow 1s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(91,163,224,0.3); }
+  50%       { box-shadow: 0 0 0 6px rgba(91,163,224,0); }
+}
+
+.pulse-icon {
+  font-size: 16px;
+}
+
+.pulse-status {
+  text-align: center;
+  font-size: 11px;
+  font-family: var(--font-mono);
+  color: var(--text-secondary);
+  min-height: 16px;
+  margin-top: 6px;
+}
+
+/* Barre de progression 5 secondes */
+.pulse-progress {
+  height: 3px;
+  background: var(--bg-inset);
+  border-radius: 2px;
+  margin-top: 6px;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.pulse-progress.visible {
+  opacity: 1;
+}
+
+.pulse-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--blue);
+  border-radius: 2px;
+  transition: width linear;
+}
+
+/* ================================================================
+   10. CYLINDRE NIVEAU CUVE
+================================================================ */
+.water-level-section {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.water-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-secondary);
+  align-self: flex-start;
+}
+
+.cylinder-wrap {
+  display: flex;
+  align-items: stretch;
+  gap: 10px;
+  width: 100%;
+}
+
+/* Axe de graduation (gauche) */
+.cylinder-axis {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 6px 0;
+  width: 28px;
+  flex-shrink: 0;
+}
+
+.axis-tick {
+  font-size: 9px;
+  font-family: var(--font-mono);
+  color: var(--text-dim);
+  text-align: right;
+  line-height: 1;
+}
+
+/* Corps du cylindre */
+.cylinder {
+  flex: 1;
+  height: 120px;
+  position: relative;
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  background: var(--bg-inset);
+  overflow: hidden;
+}
+
+/* Lignes de graduation internes */
+.cylinder-grid {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 6px 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.cylinder-line {
+  width: 100%;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* Remplissage d'eau (monte depuis le bas) */
+.cylinder-fill {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(91, 163, 224, 0.55) 0%,
+    rgba(91, 163, 224, 0.85) 100%
+  );
+  border-top: 1px solid rgba(91, 163, 224, 0.6);
+  transition: height 0.6s ease;
+  z-index: 1;
+}
+
+/* Reflet sur la surface de l'eau */
+.cylinder-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 2px;
+}
+
+.water-value-label {
+  font-size: 12px;
+  font-family: var(--font-mono);
+  color: var(--blue);
+  align-self: flex-start;
+}
+
+
+/* ================================================================
+   11. LIGNE BAS : rapport + alertes
+================================================================ */
+.bottom-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.report-card,
+.alerts-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 18px 20px;
+}
+
+/* Tableau rapport journalier */
+.report-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 4px;
+}
+
+.report-table tr {
+  border-bottom: 1px solid var(--border);
+}
+
+.report-table tr:last-child {
+  border-bottom: none;
+}
+
+.report-table td {
+  padding: 7px 0;
+  font-size: 12px;
+}
+
+.report-table td:first-child {
+  color: var(--text-secondary);
+}
+
+.report-table td:last-child {
+  text-align: right;
+  font-family: var(--font-mono);
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+/* Liste alertes */
+.alert-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.alert-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  font-size: 12px;
+}
+
+.alert-indicator {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.alert-text {
+  flex: 1;
+  color: var(--text-primary);
+}
+
+.alert-time {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+
+
+/* ================================================================
+   12. PANNEAU SEUILS D'ALERTE
+================================================================ */
+.seuils-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 18px 20px;
+}
+
+.seuils-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.seuil-block {
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  position: relative;
+}
+
+/* Barre colorée identique aux metric-cards */
+.seuil-block::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--seuil-accent, var(--green-mid));
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+}
+
+.seuil-capteur-label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 10px;
+}
+
+.seuil-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.seuil-row:last-child {
+  margin-bottom: 0;
+}
+
+.seuil-row-label {
+  font-size: 11px;
+  color: var(--text-dim);
+  font-family: var(--font-mono);
+  white-space: nowrap;
+}
+
+.seuil-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  padding: 3px 8px;
+  transition: border-color 0.15s;
+}
+
+.seuil-input-wrap:focus-within {
+  border-color: var(--green-mid);
+  box-shadow: 0 0 0 2px rgba(74, 158, 48, 0.15);
+}
+
+.seuil-input {
+  width: 52px;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-primary);
+  text-align: right;
+}
+
+/* Supprime les flèches natives sur <input type="number"> */
+.seuil-input::-webkit-inner-spin-button,
+.seuil-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+.seuil-input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.seuil-unit {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+/* Capteur sans seuil configurable */
+.seuil-block.disabled .seuil-input-wrap {
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.seuil-na {
+  font-size: 11px;
+  font-family: var(--font-mono);
+  color: var(--text-dim);
+  font-style: italic;
+}
+
+/* Bouton appliquer */
+.seuil-apply-btn {
+  margin-top: 14px;
+  width: 100%;
+  padding: 8px;
+  background: var(--green-dim);
+  border: 1px solid var(--green-mid);
+  border-radius: var(--radius-sm);
+  color: var(--green-bright);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  letter-spacing: 0.04em;
+}
+
+.seuil-apply-btn:hover {
+  background: var(--green-mid);
+  color: #fff;
+}
+
+/* Feedback "Seuils mis à jour" */
+.seuil-feedback {
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--green-bright);
+  min-height: 16px;
+  margin-top: 6px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.seuil-feedback.visible {
+  opacity: 1;
+}
+
+
+/* ================================================================
+   13. FOOTER
+================================================================ */
+.site-footer {
+  text-align: center;
+  padding: 16px 0 4px;
+  font-size: 11px;
+  font-family: var(--font-mono);
+  color: var(--text-dim);
+  letter-spacing: 0.04em;
+}
+
+
+/* ================================================================
+   14. RESPONSIVE
+================================================================ */
+@media (max-width: 900px) {
+  .metrics-grid        { grid-template-columns: repeat(2, 1fr); }
+  .main-row            { grid-template-columns: 1fr; }
+  .bottom-row          { grid-template-columns: 1fr; }
+  .seuils-grid         { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 500px) {
+  .metrics-grid        { grid-template-columns: 1fr; }
+  .seuils-grid         { grid-template-columns: 1fr; }
+  body                 { padding: 12px; }
+}
