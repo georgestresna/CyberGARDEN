@@ -10,9 +10,7 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background-color: #f9fafb;
-            /* Very light gray background */
             color: #111827;
-            /* Dark text for high readability */
             margin: 0;
             padding: 40px 20px;
             display: flex;
@@ -27,13 +25,11 @@
             letter-spacing: -0.5px;
         }
 
-        /* Centers the dashboard and keeps it from stretching too wide */
         .container {
             width: 100%;
             max-width: 450px;
         }
 
-        /* Clean white panels with subtle shadows */
         .card {
             background: #ffffff;
             padding: 24px;
@@ -53,7 +49,7 @@
             letter-spacing: 0.5px;
         }
 
-        /* Modern Button Styling */
+        /* Modern Button Styling for the Pulse Action */
         #pump-btn {
             padding: 14px 20px;
             font-size: 15px;
@@ -64,15 +60,21 @@
             width: 100%;
             transition: all 0.2s ease;
             color: white;
+            background-color: #3b82f6;
+            /* Modern Blue */
         }
 
         #pump-btn:hover {
             transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+            background-color: #2563eb;
+            /* Slightly darker blue on hover */
         }
 
         #pump-btn:disabled {
-            opacity: 0.6;
+            background-color: #9ca3af !important;
+            /* Gray out when watering */
+            opacity: 0.8;
             cursor: not-allowed;
             transform: none;
             box-shadow: none;
@@ -84,10 +86,8 @@
             margin-top: 12px;
             text-align: center;
             min-height: 20px;
-            /* Prevents the layout from jumping when text appears */
         }
 
-        /* Clean Raw Data Viewer */
         .raw-data {
             background: #f3f4f6;
             padding: 16px;
@@ -109,7 +109,8 @@
     <div class="container">
         <div class="card">
             <h2>Hardware Controls</h2>
-            <button id="pump-btn" onclick="togglePump()">Loading state...</button>
+            <!-- Changed from toggle to a pulse trigger -->
+            <button id="pump-btn" onclick="triggerWatering()">💧 Water Plant (5s)</button>
             <p id="command-status"></p>
         </div>
 
@@ -120,65 +121,54 @@
     </div>
 
     <script>
-        // CRITICAL FIX: Ensure you are using json_data here based on the app.py fix!
+        // Load the sensor data passed from FastAPI
         const database = {{ data | tojson | safe }};
 
-        let currentPumpState = 0;
-
+        // Display the most recent data entry in the JSON viewer
         if (database && database.length > 0) {
             const latestEntry = database[database.length - 1];
             document.getElementById('latest-data-view').innerText = JSON.stringify(latestEntry, null, 2);
-
-            if (latestEntry.pump_state === 1) {
-                currentPumpState = 1;
-            }
         }
 
-        function renderButton() {
-            const btn = document.getElementById('pump-btn');
-            if (currentPumpState === 1) {
-                btn.style.backgroundColor = "#10b981"; // Modern soft green
-                btn.innerText = "💧 Water is ON (Click to turn OFF)";
-            } else {
-                btn.style.backgroundColor = "#ef4444"; // Modern soft red
-                btn.innerText = "🛑 Water is OFF (Click to turn ON)";
-            }
-        }
-
-        function togglePump() {
+        // The new 5-second Pulse Function
+        async function triggerWatering() {
             const btn = document.getElementById('pump-btn');
             const statusText = document.getElementById('command-status');
-            const targetState = (currentPumpState === 1) ? 0 : 1;
 
-            btn.innerText = "Sending command...";
+            // 1. Instantly update the UI so the user can't spam the button
             btn.disabled = true;
+            btn.innerText = "⏳ Watering... (5s)";
+            statusText.innerText = "Sending command to AWS...";
 
-            fetch('/api/command/pump', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ state: targetState })
-            })
-                .then(response => response.json())
-                .then(res => {
-                    btn.disabled = false;
-                    if (res.status === "success") {
-                        currentPumpState = res.state;
-                        renderButton();
-                        statusText.innerText = "Command sent successfully.";
-
-                        // Added a nice touch: Hide the success message after 3 seconds so it stays clean
-                        setTimeout(() => { statusText.innerText = ""; }, 3000);
-                    } else {
-                        statusText.innerText = "Server error: " + res.message;
-                    }
-                })
-                .catch(error => {
-                    btn.disabled = false;
-                    statusText.innerText = "Network error.";
+            try {
+                // 2. Call the new pulse endpoint
+                const response = await fetch('/api/command/pulse', {
+                    method: 'POST'
+                    // We don't need a body anymore, the endpoint purely means "send 1"
                 });
-        }
 
-        renderButton();
+                const result = await response.json();
+
+                if (result.status === "success") {
+                    statusText.innerText = "✅ Command sent to garden.";
+                } else {
+                    statusText.innerText = "❌ Server error: " + result.message;
+                }
+            } catch (error) {
+                console.error("Failed to send command:", error);
+                statusText.innerText = "❌ Network error. Could not reach server.";
+            }
+
+            // 3. Start the 5-second UI countdown
+            // Even if the network is slow, the button stays locked for 5 full seconds
+            setTimeout(() => {
+                btn.disabled = false;
+                btn.innerText = "💧 Water Plant (5s)";
+
+                // Clear the status text shortly after finishing
+                setTimeout(() => { statusText.innerText = ""; }, 3000);
+            }, 5000);
+        }
     </script>
 </body>
 

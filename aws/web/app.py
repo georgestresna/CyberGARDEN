@@ -69,3 +69,31 @@ async def control_pump(request: Request):
         return {"status": "success", "state": target_state}
     except Exception as e:
         return {"status": "error", "message": str(e)}
+    
+@app.post("/api/command/pulse")
+async def trigger_water_pulse():
+    """
+    Triggers a 5-second watering pulse. 
+    Sends '1' to MQTT and logs the event to MongoDB.
+    """
+    try:
+        # 1. Publish to Mosquitto (The Pi will hear this and forward to STM32)
+        # We hardcode "1" here because this specific route is ONLY for turning it on.
+        publish.single(
+            topic="cybergarden/commands/pump",
+            payload="1",
+            hostname="mosquitto", 
+            port=1883
+        )
+
+        # 2. Log this manual action into MongoDB for history/auditing
+        await db.commands.insert_one({
+            "device": "pump",
+            "action": "manual_pulse_5s",
+            "timestamp": datetime.now().isoformat(),
+            "status": "sent"
+        })
+
+        return {"status": "success", "message": "Pulse command sent"}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
