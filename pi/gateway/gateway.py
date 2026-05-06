@@ -5,11 +5,10 @@ import os
 import paho.mqtt.client as mqtt
 from datetime import datetime, timedelta
 
-# ==========================================
-# 1. CONFIGURATION
-# ==========================================
-TARGET_MAC = "00:06:66:6E:10:B8"
-BT_PORT = 1
+
+# Bluetooth module static info
+TARGET_MAC = "00:06:66:6E:10:B8" 
+BT_PORT = 1 
 
 AWS_BROKER = os.getenv("AWS_BROKER", "127.0.0.1") 
 MQTT_PORT = 1883
@@ -24,9 +23,6 @@ COOLDOWN_MINUTES = 10       # Wait 10 mins after watering before checking again
 bt_sock = None
 auto_suspended_until = datetime.now()
 
-# ==========================================
-# 2. HELPER: SEND COMMAND TO STM32
-# ==========================================
 def send_to_stm32(command_char):
     """Safely sends a character ('1' or '0') over Bluetooth to the STM32."""
     global bt_sock
@@ -35,63 +31,57 @@ def send_to_stm32(command_char):
             # We add a newline character so the STM32 knows the command is complete
             msg = f"{command_char}\n"
             bt_sock.send(msg.encode('utf-8'))
-            print(f"⚡ Sent '{command_char}' to STM32.")
+            print(f"[*] Sent '{command_char}' to STM32.")
         except Exception as e:
-            print(f"❌ Failed to send command to STM32: {e}")
+            print(f"[!] Failed to send command to STM32: {e}")
     else:
-        print("⚠️ Cannot send command. STM32 is not connected.")
+        print("[!] Cannot send command. STM32 is not connected.")
 
-# ==========================================
-# 3. AWS MQTT CALLBACK (THE MANUAL OVERRIDE)
-# ==========================================
+
 def on_message(client, userdata, msg):
     """Fires instantly whenever you press the button on the Web Dashboard."""
     global auto_suspended_until
     
     command = msg.payload.decode('utf-8').strip()
-    print(f"\n🚨 AWS MANUAL COMMAND RECEIVED: {command}")
+    print(f"\n[*] AWS MANUAL COMMAND RECEIVED: {command}")
     
     if command == "1":
         # 1. Send the pulse command to the hardware
         send_to_stm32("1")
-        
         # 2. Suspend automatic watering for 10 minutes so they don't fight
         auto_suspended_until = datetime.now() + timedelta(minutes=COOLDOWN_MINUTES)
-        print(f"⏱️ Auto-watering suspended until {auto_suspended_until.strftime('%H:%M:%S')} to let water soak in.")
+        print(f"[*] Auto-watering suspended until {auto_suspended_until.strftime('%H:%M:%S')} to let water soak in.")
 
 # Setup MQTT
 mqtt_client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2, "PiEdgeGateway")
 mqtt_client.on_message = on_message
 
-print(f"☁️ Connecting to AWS Broker at {AWS_BROKER}...")
+print(f"[*] Connecting to AWS Broker at {AWS_BROKER}...")
 try:
     mqtt_client.connect(AWS_BROKER, MQTT_PORT)
     mqtt_client.subscribe(MQTT_SUB_TOPIC) # Start listening for the button!
     mqtt_client.loop_start() 
-    print("✅ AWS Connected & Listening for commands!")
+    print("[*] AWS Connected & Listening for commands!")
 except Exception as e:
-    print(f"❌ AWS Connection failed: {e}")
+    print(f"[*] AWS Connection failed: {e}")
     exit()
 
-# ==========================================
-# 4. THE MAIN LOOP (BLUETOOTH & AUTO LOGIC)
-# ==========================================
 def run_gateway():
     global bt_sock, auto_suspended_until
     
-    print(f"🔌 Connecting to STM32 Bluetooth ({TARGET_MAC})...")
+    print(f"[*] Connecting to STM32 Bluetooth ({TARGET_MAC})...")
     bt_sock = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM)
     
     try:
         bt_sock.connect((TARGET_MAC, BT_PORT))
-        print("✅ STM32 Connected! Listening for data...\n")
+        print("     [*] STM32 Connected! Listening for data...\n")
         
         buffer = "" 
         while True:
-            # 1. Listen for sensor data
+            #Listen for sensor data
             chunk = bt_sock.recv(1024)
             if not chunk:
-                print("⚠️ STM32 disconnected.")
+                print("     [!] STM32 disconnected.")
                 break
                 
             buffer += chunk.decode('utf-8')
@@ -101,46 +91,42 @@ def run_gateway():
                 line = line.strip()
                 
                 if line:
-                    print(f"📥 STM32 Sensor Data: {line}")
+                    print(f"    [*] STM32 Sensor Data: {line}")
                     
-                    # 2. Process and forward data to AWS
+                    #Process and forward data to AWS
                     try:
                         data = json.loads(line)
                         data["timestamp"] = datetime.now().isoformat()
                         aws_payload = json.dumps(data)
                         mqtt_client.publish(MQTT_PUB_TOPIC, aws_payload)
                         
-                        # 3. THE AUTO LOGIC BRAIN
-                        # Only check the soil if we aren't in a cooldown period
+                        #BRAIN Logic (Automation): Only check the soil if we aren't in a cooldown period
                         if datetime.now() > auto_suspended_until:
                             humidity = float(data.get("humidity", 100))
                             
                             if humidity < HUMIDITY_THRESHOLD:
-                                print(f"🌱 AUTO: Soil is dry ({humidity}%). Triggering water pulse.")
+                                print(f"     [*] AUTO: Soil is dry ({humidity}%). Triggering water pulse.")
                                 send_to_stm32("1")
                                 # Suspend auto-logic for 10 mins to let water sink into the dirt
                                 auto_suspended_until = datetime.now() + timedelta(minutes=COOLDOWN_MINUTES)
                                 
                     except json.JSONDecodeError:
-                        print("🗑️ Invalid JSON received.")
+                        print("     [!] Invalid JSON received.")
                         
     except Exception as e:
-        print(f"❌ Gateway Error: {e}")
+        print(f"[!] Gateway Error: {e}")
     finally:
         if bt_sock:
             bt_sock.close()
             bt_sock = None
 
-# ==========================================
-# 5. EXECUTION
-# ==========================================
 if __name__ == "__main__":
     try:
         while True:
             run_gateway()
-            print("🔄 Retrying Bluetooth in 5 seconds...")
+            print("[!] Retrying Bluetooth in 5 seconds...")
             time.sleep(5)
     except KeyboardInterrupt:
-        print("\n🚪 Shutting down Edge Gateway.")
+        print("\n[!] Shutting down Edge Gateway.")
         mqtt_client.loop_stop()
         mqtt_client.disconnect()
