@@ -19,6 +19,6 @@ jobs:
           key: ${{ secrets.AWS_SSH_KEY }}
           # I noticed your path from the previous error message!
           script: |
-            cd /CyberGARDEN/aws
+            cd ./CyberGARDEN/aws
             git pull origin main
             ./run.sh
