@@ -32,3 +32,7 @@ In another terminal while the docker infrastructure is active and working:
 
 ## MQTT observation
 port 1883 is plain text - not secure, port 8883 is over a ssl/tcl certificate. 
+
+## MQTT credentials
+user: root
+pass: root

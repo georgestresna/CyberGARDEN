@@ -1,0 +1,24 @@
+name: Deploy Cloud (AWS)
+
+# This tells GitHub to run this script every time you push to the 'main' branch
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - 'aws/**' # Only run if files in the /aws folder were changed
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: SSH into AWS and Deploy
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.AWS_HOST }}
+          username: ${{ secrets.AWS_USERNAME }}
+          key: ${{ secrets.AWS_SSH_KEY }}
+          # I noticed your path from the previous error message!
+          script: |
+            cd /CyberGARDEN/aws
+            git pull origin main
+            ./run.sh

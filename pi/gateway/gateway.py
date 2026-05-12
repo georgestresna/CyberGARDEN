@@ -54,6 +54,7 @@ def on_message(client, userdata, msg):
 
 # Setup MQTT
 mqtt_client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2, "PiEdgeGateway")
+mqtt_client.username_pw_set("root", "root")
 mqtt_client.on_message = on_message
 
 print(f"[*] Connecting to AWS Broker at {AWS_BROKER}...")
