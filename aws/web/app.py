@@ -53,6 +53,7 @@ async def trigger_water_pulse():
     try:
         auth = {'username': 'root', 'password': 'root'}
         # 1. Publish to Mosquitto (The Pi will hear this and forward to STM32)
+        # Command to test CI/CD
         # We hardcode "1" here because this specific route is ONLY for turning it on.
         publish.single(
             topic="cybergarden/commands/pump",
