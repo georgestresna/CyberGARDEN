@@ -1,6 +1,8 @@
 services:
   gateway:
-    build: ./gateway
+    build: 
+      context: ./gateway
+      network: host
     container_name: gateway
     restart: unless-stopped
     privileged: true         # Required to access hardware antennas
