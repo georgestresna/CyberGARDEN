@@ -36,3 +36,6 @@ port 1883 is plain text - not secure, port 8883 is over a ssl/tcl certificate.
 ## MQTT credentials
 user: root
 pass: root
+
+## AWS follow real time state:
+docker compose logs -f
