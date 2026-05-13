@@ -20,8 +20,10 @@ jobs:
           # I noticed your path from the previous error message!
           script: |
             cd ./CyberGARDEN/aws
-            git pull origin main
+            git fetch origin
+            git reset --hard origin/main
+            git clean -fd
             chmod +x run.sh
             nohup ./run.sh > /dev/null 2>&1 &
-            sleep 0.5
+            sleep 2
             exit
