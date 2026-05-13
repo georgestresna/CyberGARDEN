@@ -21,4 +21,7 @@ jobs:
           script: |
             cd ./CyberGARDEN/aws
             git pull origin main
-            ./run.sh
+            chmod +x run.sh
+            nohup ./run.sh > /dev/null 2>&1 &
+            sleep 0.5
+            exit
