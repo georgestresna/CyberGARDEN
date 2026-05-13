@@ -7,6 +7,6 @@ services:
     restart: unless-stopped
     privileged: true         # Required to access hardware antennas
     network_mode: "host"     # Shares the Pi's Bluetooth/Wifi network directly
-    pull_policy: missing
+    #pull_policy: missing
     environment:
       - AWS_BROKER=13.63.71.56
