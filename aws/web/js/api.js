@@ -94,15 +94,17 @@ function adaptHistory(docs, range) {
 }
 
 function adaptReport(doc) {
-  // Optionnel: On peut laisser doc.date si le backend la renvoie
   return {
-    date:           "Dernière Heure",
-    temp_moy:       doc.temp_moyenne         != null ? `${doc.temp_moyenne} °C`        : '—',
-    hum_air_moy:    doc.humidite_air_moyenne != null ? `${doc.humidite_air_moyenne} %` : '—',
-    hum_sol_moy:    '— (pas de capteur sol)',
-    arrosages:      doc.nb_arrosages         != null ? `${doc.nb_arrosages} déclenchement(s)` : '—',
-    luminosite_moy: doc.luminosite_moyenne   != null ? `${doc.luminosite_moyenne} lux` : '—',
-    consommation:   doc.volume_eau_l         != null ? `${doc.volume_eau_l} L`         : '—',
+    date: doc.date || "Dernière Heure",
+    temp_moy: doc.temp_moyenne != null ? `${doc.temp_moyenne} °C` : '—',
+    hum_air_moy: doc.humidite_air_moyenne != null ? `${doc.humidite_air_moyenne} %` : '—',
+
+    // CHANGED: This now reads the soil moisture from your Python backend!
+    hum_sol_moy: doc.humidite_sol_moyenne != null ? `${doc.humidite_sol_moyenne}` : '—',
+
+    arrosages: doc.nb_arrosages != null ? `${doc.nb_arrosages} déclenchement(s)` : '—',
+    luminosite_moy: doc.luminosite_moyenne != null ? `${doc.luminosite_moyenne} lux` : '—',
+    consommation: doc.volume_eau_l != null ? `${doc.volume_eau_l} L` : '—',
   };
 }
 
