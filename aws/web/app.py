@@ -51,7 +51,6 @@ async def trigger_water_pulse():
     Sends '1' to MQTT and logs the event to MongoDB.
     """
     try:
-        auth = {'username': 'root', 'password': 'root'}
         # 1. Publish to Mosquitto (The Pi will hear this and forward to STM32)
         #test ci/cd part2
         # We hardcode "1" here because this specific route is ONLY for turning it on.
@@ -59,8 +58,7 @@ async def trigger_water_pulse():
             topic="cybergarden/commands/pump",
             payload="1",
             hostname="mosquitto", 
-            port=1883,
-            auth=auth
+            port=1883
         )
 
         # 2. Log this manual action into MongoDB for history/auditing
