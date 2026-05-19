@@ -148,11 +148,13 @@ async def get_today_report():
     avg_temp = round(sum(s.get("temperature", 0) for s in sensors) / len(sensors), 1)
     avg_hum = round(sum(s.get("humidite", 0) for s in sensors) / len(sensors), 1)
     avg_lum = round(sum(s.get("lumiere", 0) for s in sensors) / len(sensors), 1)
+    avg_soil = round(sum(s.get("soil_moisture", 0) for s in sensors) / len(sensors), 1)
     
     return {
         "date": datetime.now().isoformat(),
         "temp_moyenne": avg_temp,
         "humidite_air_moyenne": avg_hum,
+        "humidite_sol_moyenne": avg_soil,
         "luminosite_moyenne": avg_lum,
         "nb_arrosages": len(commands),
         "volume_eau_l": round(len(commands) * 0.1, 2)
@@ -167,7 +169,8 @@ async def test_db_connection():
         doc_count = await db.sensors.count_documents({})
         
         # Grab just one document to inspect its structure
-        sample_doc = await db.sensors.find_one()
+        sample_doc = await db.sensors.find_one({}, sort=[("timestamp", -1)])
+        
         if sample_doc:
             sample_doc["_id"] = str(sample_doc["_id"]) # Fix the ObjectID for JSON
             

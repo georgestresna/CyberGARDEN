@@ -148,7 +148,7 @@ function adaptLatest(doc) {
       },
       humidite_sol: {
         label: 'Humidité sol', unit: '%', accent: '#e8a234',
-        value:     null,   // pas encore de capteur sol dans le JSON de Pierre
+        value:     doc.humidite_sol ?? null,   // pas encore de capteur sol dans le JSON de Pierre
         avg24h:    null,
         status:    'ok',
         threshold: null,
@@ -180,7 +180,7 @@ function adaptHistory(docs, range) {
   return docs.map(doc => ({
     t:       formatTimestamp(doc.timestamp, range),
     temp:    doc.temperature ?? 0,
-    hum_sol: 0,                     // pas de capteur sol
+    hum_sol: doc.humidite_sol ?? 0,                     // pas de capteur sol
     hum_air: doc.humidite    ?? 0,  // champ MongoDB : "humidite"
   }));
 }
