@@ -73,6 +73,30 @@ async def trigger_water_pulse():
     except Exception as e:
         return {"status": "error", "message": str(e)}
     
+
+@app.post("/api/command/ventilation")
+async def trigger_ventilation():
+    """Send a 5-second pulse command to the fan."""
+    try:
+        publish.single(
+            topic="cybergarden/commands/fan", # The topic your STM32 will listen to for the fan
+            payload="1",
+            hostname="mosquitto", 
+            port=1883
+        )
+        
+        # Log it in MongoDB so it shows up in alerts/reports
+        await db.commands.insert_one({
+            "action": "ventilation_pulse",
+            "device": "fan",
+            "status": "sent",
+            "timestamp": datetime.now().isoformat()
+        })
+        
+        return {"status": "success", "message": "Ventilation pulse sent"}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
+    
 @app.get("/api/latest")
 async def get_latest_data():
     """Returns the single most recent sensor reading."""
@@ -87,16 +111,18 @@ async def get_history(range: str = "6h"):
     """Returns an array of sensor data for the Chart.js graph."""
     now = datetime.now()
     
-    # Determine how far back to look
-    if range == "6h":
+    # --- ADD THE 30m OPTION HERE ---
+    if range == "30m":
+        delta = timedelta(minutes=30)
+    elif range == "6h":
         delta = timedelta(hours=6)
     elif range == "24h":
         delta = timedelta(hours=24)
     elif range == "7j":
         delta = timedelta(days=7)
     else:
-        delta = timedelta(hours=6)
-
+        delta = timedelta(hours=6) # Default
+        
     start_time = now - delta
     
     # Fetch all records since the start time, sorted chronologically
@@ -152,6 +178,39 @@ async def get_today_report():
     
     return {
         "date": datetime.now().isoformat(),
+        "temp_moyenne": avg_temp,
+        "humidite_air_moyenne": avg_hum,
+        "humidite_sol_moyenne": avg_soil,
+        "luminosite_moyenne": avg_lum,
+        "nb_arrosages": len(commands),
+        "volume_eau_l": round(len(commands) * 0.1, 2)
+    }
+
+@app.get("/api/report/1h")
+async def get_report_1h():
+    """Generates a summary report for the last hour."""
+    one_hour_ago = datetime.now() - timedelta(hours=1)
+    query = {"timestamp": {"$gte": one_hour_ago.isoformat()}}
+    
+    # Fetch data
+    cursor = db.sensors.find(query)
+    sensors = await cursor.to_list(length=1000)
+    
+    # Fetch commands sent in the last hour
+    cmd_cursor = db.commands.find(query)
+    commands = await cmd_cursor.to_list(length=100)
+    
+    if not sensors:
+        return {"date": "Heure écoulée", "message": "Aucune donnée"}
+
+    # Calculate averages
+    avg_temp = round(sum(s.get("temperature", 0) for s in sensors) / len(sensors), 1)
+    avg_hum = round(sum(s.get("humidite", 0) for s in sensors) / len(sensors), 1)
+    avg_soil = round(sum(s.get("humidite_sol", 0) for s in sensors) / len(sensors), 1)
+    avg_lum = round(sum(s.get("lumiere", 0) for s in sensors) / len(sensors), 1)
+    
+    return {
+        "date": "Dernière Heure",
         "temp_moyenne": avg_temp,
         "humidite_air_moyenne": avg_hum,
         "humidite_sol_moyenne": avg_soil,

@@ -171,6 +171,7 @@ async function init() {
     renderAll(_data, _activeRange);
 
     initTabListeners();
+    // initToggleListeners();  <--- SUPPRIMEZ OU COMMENTEZ CETTE LIGNE !
     initSeuilsListener();
   } catch (err) {
     console.error('[Cyber-Garden] Erreur de chargement des données :', err);

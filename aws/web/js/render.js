@@ -49,19 +49,20 @@ function renderMetrics(capteurs) {
 }
 
 function renderActionneurs(actionneurs, cuve) {
-  /* Seul le cylindre de la cuve reste généré dynamiquement ici, 
-     les boutons d'impulsion sont gérés directement en HTML/JS. */
+  /* ── Toggles supprimés du HTML : On ne gère plus que le Cylindre cuve ── */
   const { pct, litres_restants, litres_total } = cuve;
 
   document.getElementById('cylinder-fill').style.height = pct + '%';
   document.getElementById('water-value-label').textContent =
     `${litres_restants} L / ${litres_total} L (${pct} %)`;
 
+  // Ticks de l'axe (100% en haut → 0% en bas)
   const axis = document.getElementById('cylinder-axis');
   axis.innerHTML = ['100%', '75%', '50%', '25%', '0%']
     .map(t => `<span class="axis-tick">${t}</span>`)
     .join('');
 
+  // Lignes horizontales internes
   const grid = document.getElementById('cylinder-grid');
   grid.innerHTML = [0, 1, 2, 3, 4]
     .map(() => `<div class="cylinder-line"></div>`)
