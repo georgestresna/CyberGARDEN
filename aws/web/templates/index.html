@@ -9,12 +9,12 @@
     <link
         href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="/css/dashboard.css">
+    <link rel="stylesheet" href="./css/dashboard.css">
 </head>
 
 <body>
     <!-- ========================================== -->
-    <!-- 🛠️ TEMPORARY DEBUG TOOL 🛠️ -->
+    <!-- temporary debug tool -->
     <!-- ========================================== -->
     <div
         style="background: #fff3cd; padding: 20px; margin: 20px auto; max-width: 800px; border: 2px solid #ffe69c; border-radius: 8px; font-family: sans-serif; position: relative; z-index: 9999;">
@@ -38,7 +38,6 @@
                 try {
                     const response = await fetch('/api/test');
                     const data = await response.json();
-                    // Print the raw JSON exactly as the server sends it
                     terminal.innerText = JSON.stringify(data, null, 2);
                 } catch (error) {
                     terminal.innerText = "NETWORK ERROR: Could not reach FastAPI. \n" + error;
@@ -47,12 +46,12 @@
         </script>
     </div>
     <!-- ========================================== -->
+    
     <div class="dashboard">
 
         <!-- ── TOPBAR ───────────────────────────────────────────── -->
         <header class="topbar">
             <div class="topbar-center">
-                <div class="logo">🌿</div>
                 <div class="site-title">Cyber<span>Garden</span></div>
             </div>
         </header>
@@ -69,12 +68,10 @@
                 <div class="card-header">
                     <div>
                         <div class="card-title">Évolution des capteurs</div>
-                        <div class="card-subtitle" id="chart-range-label">6 dernières heures</div>
+                        <div class="card-subtitle" id="chart-range-label">30 dernières minutes</div>
                     </div>
                     <div class="tab-group">
-                        <button class="tab-btn active" data-range="6h">6 h</button>
-                        <button class="tab-btn" data-range="24h">24 h</button>
-                        <button class="tab-btn" data-range="7j">7 j</button>
+                        <button class="tab-btn active" data-range="30m">30 min</button>
                     </div>
                 </div>
                 <div class="chart-wrap">
@@ -85,10 +82,10 @@
                         <div class="legend-dot" style="background:#7dce5f"></div>Température (°C)
                     </div>
                     <div class="legend-item">
-                        <div class="legend-dot" style="background:#5ba3e0"></div>Humidité sol (%)
+                        <div class="legend-dot" style="background:#e8a234"></div>Humidité sol (%)
                     </div>
                     <div class="legend-item">
-                        <div class="legend-dot" style="background:#e8a234"></div>Humidité air (%)
+                        <div class="legend-dot" style="background:#5ba3e0"></div>Humidité air (%)
                     </div>
                 </div>
             </div>
@@ -98,7 +95,7 @@
                     <div class="card-title">Actionneurs</div>
                 </div>
 
-                <!-- Bouton arrosage impulsion (remplace le toggle) -->
+                <!-- Bouton arrosage impulsion -->
                 <div class="pulse-section">
                     <button class="pulse-btn" id="pulse-btn" onclick="onPulseClick()">
                         <span class="pulse-icon">💧</span>
@@ -110,9 +107,18 @@
                     </div>
                 </div>
 
-                <div id="actions-list">
-                    <!-- Ventilation + éclairage générés par render.js → renderActionneurs() -->
+                <!-- Bouton ventilation impulsion (Nouveau) -->
+                <div class="pulse-section">
+                    <button class="pulse-btn" id="ventilation-btn" onclick="onVentilationClick()" style="background: #2b3342; border-color: #3b4455; color: white;">
+                        <span class="pulse-icon">💨</span>
+                        <span id="ventilation-label">Ventiler (5 s)</span>
+                    </button>
+                    <div class="pulse-status" id="ventilation-status"></div>
+                    <div class="pulse-progress" id="ventilation-progress">
+                        <div class="pulse-progress-fill" id="ventilation-progress-fill" style="background: #5ba3e0;"></div>
+                    </div>
                 </div>
+
                 <div class="water-level-section">
                     <span class="water-label">Niveau cuve</span>
                     <div class="cylinder-wrap">
@@ -128,28 +134,20 @@
 
         </div>
 
-        <!-- ── RAPPORT + ALERTES ────────────────────────────────── -->
+        <!-- ── RAPPORT ──────────────────────────────────────────── -->
         <div class="bottom-row">
 
-            <div class="report-card">
+            <!-- La carte rapport prendra toute la largeur ou s'adaptera selon ton CSS vu que les alertes sont supprimées -->
+            <div class="report-card" style="width: 100%;">
                 <div class="card-header">
                     <div>
-                        <div class="card-title">Rapport du jour</div>
+                        <div class="card-title">Rapport de la dernière heure</div>
                         <div class="card-subtitle" id="report-date-label">—</div>
                     </div>
                 </div>
                 <table class="report-table" id="report-table">
                     <!-- Généré par render.js → renderReport() -->
                 </table>
-            </div>
-
-            <div class="alerts-card">
-                <div class="card-header">
-                    <div class="card-title">Alertes récentes</div>
-                </div>
-                <div class="alert-list" id="alert-list">
-                    <!-- Généré par render.js → renderAlerts() -->
-                </div>
             </div>
 
         </div>
@@ -182,10 +180,10 @@
     <!-- Dépendances externes -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 
-    <!-- Application — ordre important : data → render → main -->
-    <script src="/js/api.js"></script>
-    <script src="/js/render.js"></script>
-    <script src="/js/main.js"></script>
+    <!-- Application -->
+    <script src="./js/api.js"></script>
+    <script src="./js/render.js"></script>
+    <script src="./js/main.js"></script>
 
 </body>
 
