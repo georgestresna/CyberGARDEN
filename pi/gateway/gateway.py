@@ -58,8 +58,8 @@ def on_message(client, userdata, msg):
     # --- 2. VENTILATOR COMMAND ---
     elif topic == "cybergarden/commands/fan" and command == "1":
         # Send '2' to STM32 for the fan
-        send_to_stm32("2")
-        print("[*] Fan triggered for 5 seconds.")
+        send_to_stm32("F")
+        print("[*] Fan triggered for 5 seconds. F MAJUSCULE!!")
 
 # Setup MQTT
 mqtt_client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2, "PiEdgeGateway")
