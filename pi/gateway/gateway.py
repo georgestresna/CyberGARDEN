@@ -13,7 +13,7 @@ BT_PORT = 1
 AWS_BROKER = os.getenv("AWS_BROKER", "127.0.0.1") 
 MQTT_PORT = 1883
 MQTT_PUB_TOPIC = "cybergarden/sensors"
-MQTT_SUB_TOPIC = "cybergarden/commands/pump"
+MQTT_SUB_TOPIC = "cybergarden/commands/#"
 
 # Logic thresholds
 HUMIDITY_THRESHOLD = 30.0   # Turn on if humidity drops below 30%
@@ -43,14 +43,23 @@ def on_message(client, userdata, msg):
     global auto_suspended_until
     
     command = msg.payload.decode('utf-8').strip()
-    print(f"\n[*] AWS MANUAL COMMAND RECEIVED: {command}")
+    topic = msg.topic
     
-    if command == "1":
-        # 1. Send the pulse command to the hardware
+    print(f"\n[*] AWS MANUAL COMMAND RECEIVED on {topic}: {command}")
+    
+    # --- 1. WATER PUMP COMMAND ---
+    if topic == "cybergarden/commands/pump" and command == "1":
+        # Send '1' to STM32 for the pump
         send_to_stm32("1")
-        # 2. Suspend automatic watering for 10 minutes so they don't fight
+        # Suspend automatic watering so they don't fight
         auto_suspended_until = datetime.now() + timedelta(minutes=COOLDOWN_MINUTES)
         print(f"[*] Auto-watering suspended until {auto_suspended_until.strftime('%H:%M:%S')} to let water soak in.")
+        
+    # --- 2. VENTILATOR COMMAND ---
+    elif topic == "cybergarden/commands/fan" and command == "1":
+        # Send '2' to STM32 for the fan
+        send_to_stm32("2")
+        print("[*] Fan triggered for 5 seconds.")
 
 # Setup MQTT
 mqtt_client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2, "PiEdgeGateway")
