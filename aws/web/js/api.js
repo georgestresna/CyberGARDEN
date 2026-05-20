@@ -4,12 +4,27 @@
 
 const API_BASE_URL = 'http://13.63.71.56:8000';
 
+// const ROUTES = {
+//   latest:      `${API_BASE_URL}/api/latest`,
+//   history30m:  `${API_BASE_URL}/api/history?range=30m`,
+//   report1h:    `${API_BASE_URL}/api/report/1h`,
+//   pulse:       `${API_BASE_URL}/api/command/pulse`,
+//   ventilation: `${API_BASE_URL}/api/command/ventilation` // Nouveau
+// };
+
 const ROUTES = {
-  latest:      `${API_BASE_URL}/api/latest`,
-  history30m:  `${API_BASE_URL}/api/history?range=30m`,
-  report1h:    `${API_BASE_URL}/api/report/1h`,
-  pulse:       `${API_BASE_URL}/api/command/pulse`,
-  ventilation: `${API_BASE_URL}/api/command/ventilation` // Nouveau
+  latest: `${API_BASE_URL}/api/latest`,
+  history30m: `${API_BASE_URL}/api/history?range=30m`,
+  history6h: `${API_BASE_URL}/api/history?range=6h`,
+  history24h: `${API_BASE_URL}/api/history?range=24h`,
+  history7j: `${API_BASE_URL}/api/history?range=7j`,
+  report: `${API_BASE_URL}/api/report/today`,
+  report1h: `${API_BASE_URL}/api/report/1h`,
+  alerts: `${API_BASE_URL}/api/alerts?limit=10`,
+
+  // --- UPDATED COMMAND ROUTES ---
+  pulse: `${API_BASE_URL}/api/command/water`, // Points to the new water route
+  ventilation: `${API_BASE_URL}/api/command/fan`    // Points to the new fan route
 };
 
 const FETCH_TIMEOUT_MS = 5000;

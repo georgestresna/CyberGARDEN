@@ -32,7 +32,6 @@ async def shutdown_db_client():
     client.close()
 
 ###
-
 @app.get("/", response_class=HTMLResponse)
 async def root(request: Request):
 
@@ -44,16 +43,15 @@ async def root(request: Request):
 
     return templates.TemplateResponse(request=request, name="index.html", context={"request": request, "data": data})
     
-@app.post("/api/command/pulse")
-async def trigger_water_pulse():
+
+##MANUAL COMMANDS
+@app.post("/api/command/water")
+async def trigger_water():
     """
     Triggers a 5-second watering pulse. 
     Sends '1' to MQTT and logs the event to MongoDB.
     """
     try:
-        # 1. Publish to Mosquitto (The Pi will hear this and forward to STM32)
-        #test ci/cd part2
-        # We hardcode "1" here because this specific route is ONLY for turning it on.
         publish.single(
             topic="cybergarden/commands/pump",
             payload="1",
@@ -61,7 +59,6 @@ async def trigger_water_pulse():
             port=1883
         )
 
-        # 2. Log this manual action into MongoDB for history/auditing
         await db.commands.insert_one({
             "device": "pump",
             "action": "manual_pulse_5s",
@@ -69,34 +66,33 @@ async def trigger_water_pulse():
             "status": "sent"
         })
 
-        return {"status": "success", "message": "Pulse command sent"}
+        return {"status": "success", "message": "Watering command sent"}
     except Exception as e:
         return {"status": "error", "message": str(e)}
     
-
-@app.post("/api/command/ventilation")
-async def trigger_ventilation():
+@app.post("/api/command/fan")
+async def trigger_fan():
     """Send a 5-second pulse command to the fan."""
     try:
         publish.single(
-            topic="cybergarden/commands/fan", # The topic your STM32 will listen to for the fan
+            topic="cybergarden/commands/fan",
             payload="1",
             hostname="mosquitto", 
             port=1883
         )
         
-        # Log it in MongoDB so it shows up in alerts/reports
         await db.commands.insert_one({
-            "action": "ventilation_pulse",
             "device": "fan",
-            "status": "sent",
-            "timestamp": datetime.now().isoformat()
+            "action": "manual_pulse_5s",
+            "timestamp": datetime.now().isoformat(),
+            "status": "sent"
         })
         
-        return {"status": "success", "message": "Ventilation pulse sent"}
+        return {"status": "success", "message": "Fan command sent"}
     except Exception as e:
         return {"status": "error", "message": str(e)}
-    
+
+##
 @app.get("/api/latest")
 async def get_latest_data():
     """Returns the single most recent sensor reading."""
@@ -219,7 +215,7 @@ async def get_report_1h():
         "volume_eau_l": round(len(commands) * 0.1, 2)
     }
 
-
+## TEST, LATEST DATA IN DB
 @app.get("/api/test")
 async def test_db_connection():
     """Debug route to test if MongoDB is actually holding data"""
