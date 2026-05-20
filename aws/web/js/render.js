@@ -49,24 +49,38 @@ function renderMetrics(capteurs) {
 }
 
 function renderActionneurs(actionneurs, cuve) {
-  /* ── Toggles supprimés du HTML : On ne gère plus que le Cylindre cuve ── */
+  // 1. Draw the Toggles
+  const list = document.getElementById('actions-list');
+  if (list) {
+    list.innerHTML = '';
+    Object.entries(actionneurs).forEach(([key, actionneur]) => {
+      const row = document.createElement('div');
+      row.className = 'action-row';
+      const subText = actionneur.active ? `Mode ${actionneur.mode}` : `Mode ${actionneur.mode} — OFF`;
+      row.innerHTML = `
+        <div class="action-info">
+          <div class="action-name">${actionneur.label}</div>
+          <div class="action-sub" id="sub-${key}">${subText}</div>
+        </div>
+        <label class="toggle-wrap">
+          <input type="checkbox" data-key="${key}" ${actionneur.active ? 'checked' : ''}>
+          <span class="toggle-track"></span>
+        </label>
+      `;
+      list.appendChild(row);
+    });
+  }
+
+  // 2. Draw the Water Cylinder (keep your existing cylinder code here)
   const { pct, litres_restants, litres_total } = cuve;
-
   document.getElementById('cylinder-fill').style.height = pct + '%';
-  document.getElementById('water-value-label').textContent =
-    `${litres_restants} L / ${litres_total} L (${pct} %)`;
+  document.getElementById('water-value-label').textContent = `${litres_restants} L / ${litres_total} L (${pct} %)`;
 
-  // Ticks de l'axe (100% en haut → 0% en bas)
   const axis = document.getElementById('cylinder-axis');
-  axis.innerHTML = ['100%', '75%', '50%', '25%', '0%']
-    .map(t => `<span class="axis-tick">${t}</span>`)
-    .join('');
+  axis.innerHTML = ['100%', '75%', '50%', '25%', '0%'].map(t => `<span class="axis-tick">${t}</span>`).join('');
 
-  // Lignes horizontales internes
   const grid = document.getElementById('cylinder-grid');
-  grid.innerHTML = [0, 1, 2, 3, 4]
-    .map(() => `<div class="cylinder-line"></div>`)
-    .join('');
+  grid.innerHTML = [0, 1, 2, 3, 4].map(() => `<div class="cylinder-line"></div>`).join('');
 }
 
 function renderChart(historique, range) {

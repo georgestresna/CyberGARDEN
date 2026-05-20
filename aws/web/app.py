@@ -3,11 +3,15 @@ from fastapi.responses import JSONResponse, HTMLResponse
 from fastapi.templating import Jinja2Templates
 from motor.motor_asyncio import AsyncIOMotorClient
 from fastapi.staticfiles import StaticFiles
+from pydantic import BaseModel
 from datetime import datetime, timedelta
 import paho.mqtt.publish as publish
 import os
 
 app = FastAPI()
+
+class CommandRequest(BaseModel):
+    state: int  # 1 for ON, 0 for OFF
 
 ###
 app.mount("/css", StaticFiles(directory="css"), name="css")
@@ -46,52 +50,52 @@ async def root(request: Request):
 
 ##MANUAL COMMANDS
 @app.post("/api/command/water")
-async def trigger_water():
-    """
-    Triggers a 5-second watering pulse. 
-    Sends '1' to MQTT and logs the event to MongoDB.
-    """
+async def toggle_water(cmd: CommandRequest):
+    """Turns the water pump ON (1) or OFF (0)."""
     try:
+        # Send "1" or "0" based on the toggle switch
+        payload = "1" if cmd.state == 1 else "0"
+        
         publish.single(
             topic="cybergarden/commands/pump",
-            payload="1",
+            payload=payload,
             hostname="mosquitto", 
             port=1883
         )
 
         await db.commands.insert_one({
             "device": "pump",
-            "action": "manual_pulse_5s",
+            "action": f"toggle_{'on' if cmd.state == 1 else 'off'}",
             "timestamp": datetime.now().isoformat(),
             "status": "sent"
         })
-
-        return {"status": "success", "message": "Watering command sent"}
+        return {"status": "success", "message": f"Pump turned {'ON' if cmd.state == 1 else 'OFF'}"}
     except Exception as e:
         return {"status": "error", "message": str(e)}
     
+
 @app.post("/api/command/fan")
-async def trigger_fan():
-    """Send a 5-second pulse command to the fan."""
+async def toggle_fan(cmd: CommandRequest):
+    """Turns the fan ON (1) or OFF (0)."""
     try:
+        payload = "1" if cmd.state == 1 else "0"
+        
         publish.single(
             topic="cybergarden/commands/fan",
-            payload="1",
+            payload=payload,
             hostname="mosquitto", 
             port=1883
         )
         
         await db.commands.insert_one({
             "device": "fan",
-            "action": "manual_pulse_5s",
+            "action": f"toggle_{'on' if cmd.state == 1 else 'off'}",
             "timestamp": datetime.now().isoformat(),
             "status": "sent"
         })
-        
-        return {"status": "success", "message": "Fan command sent"}
+        return {"status": "success", "message": f"Fan turned {'ON' if cmd.state == 1 else 'OFF'}"}
     except Exception as e:
         return {"status": "error", "message": str(e)}
-
 ##
 @app.get("/api/latest")
 async def get_latest_data():

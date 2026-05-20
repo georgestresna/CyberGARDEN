@@ -3,7 +3,8 @@ import time
 import json
 import os
 import paho.mqtt.client as mqtt
-from datetime import datetime, timedelta
+from datetime import datetime
+from automation_logic import AutomationController
 
 
 # Bluetooth module static info
@@ -15,16 +16,20 @@ MQTT_PORT = 1883
 MQTT_PUB_TOPIC = "cybergarden/sensors"
 MQTT_SUB_TOPIC = "cybergarden/commands/#"
 
-# Logic thresholds
-HUMIDITY_THRESHOLD = 30.0   # Turn on if humidity drops below 30%
-COOLDOWN_MINUTES = 10       # Wait 10 mins after watering before checking again
+automation = AutomationController(
+    soil_threshold=35.0,
+    air_humidity_threshold=75.0,
+    temperature_threshold=28.0,
+    watering_duration_seconds=5,
+    cooldown_minutes=10,
+    min_water_distance_cm=18.0
+)
 
 # Global State
 bt_sock = None
-auto_suspended_until = datetime.now()
 
 def send_to_stm32(command_char):
-    """Safely sends a character ('1' or '0') over Bluetooth to the STM32."""
+    """Safely sends a command over Bluetooth to the STM32."""
     global bt_sock
     if bt_sock:
         try:
@@ -39,28 +44,42 @@ def send_to_stm32(command_char):
 
 
 def on_message(client, userdata, msg):
-    """Fires instantly whenever you press the button on the Web Dashboard."""
-    global auto_suspended_until
-    
+    """
+    Gère les commandes manuelles reçues depuis AWS / Dashboard.
+    """
     command = msg.payload.decode('utf-8').strip()
     topic = msg.topic
     
     print(f"\n[*] AWS MANUAL COMMAND RECEIVED on {topic}: {command}")
     
-    # --- 1. WATER PUMP COMMAND ---
-    if topic == "cybergarden/commands/pump" and command == "1":
-        # Send '1' to STM32 for the pump
-        send_to_stm32("1")
-        # Suspend automatic watering so they don't fight
-        auto_suspended_until = datetime.now() + timedelta(minutes=COOLDOWN_MINUTES)
-        print(f"[*] Auto-watering suspended until {auto_suspended_until.strftime('%H:%M:%S')} to let water soak in.")
-        
-    # --- 2. VENTILATOR COMMAND ---
-    elif topic == "cybergarden/commands/fan" and command == "1":
-        # Send '2' to STM32 for the fan
-        send_to_stm32("F")
-        print("[*] Fan triggered for 5 seconds. F MAJUSCULE!!")
+    # Sécuriser la conversion en entier (0 ou 1)
+    try:
+        state = int(command)
+    except ValueError:
+        print("[!] Invalid command format.")
+        return
 
+    # --- 1. POMPE (ARROSAGE) ---
+    if topic == "cybergarden/commands/pump":
+        # Informer le cerveau de l'override
+        automation.handle_manual_command("valve", state)
+        
+        # Envoyer la commande physique ("1" pour ON, "0" pour OFF)
+        hardware_cmd = "1" if state == 1 else "0"
+        send_to_stm32(hardware_cmd)
+        print(f"[*] Manual Pump Override: {'ON' if state == 1 else 'OFF'}")
+
+    # --- 2. VENTILATEUR ---
+    elif topic == "cybergarden/commands/fan":
+        # Informer le cerveau de l'override
+        automation.handle_manual_command("fan", state)
+        
+        # Envoyer la commande physique ("F" pour ON, "f" pour OFF selon votre logique existante)
+        hardware_cmd = "F" if state == 1 else "f"
+        send_to_stm32(hardware_cmd)
+        print(f"[*] Manual Fan Override: {'ON' if state == 1 else 'OFF'}")
+
+        
 # Setup MQTT
 mqtt_client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2, "PiEdgeGateway")
 
@@ -77,7 +96,7 @@ except Exception as e:
     exit()
 
 def run_gateway():
-    global bt_sock, auto_suspended_until
+    global bt_sock
     
     print(f"[*] Connecting to STM32 Bluetooth ({TARGET_MAC})...")
     bt_sock = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM)
@@ -111,14 +130,24 @@ def run_gateway():
                         mqtt_client.publish(MQTT_PUB_TOPIC, aws_payload)
                         
                         #BRAIN Logic (Automation): Only check the soil if we aren't in a cooldown period
-                        if datetime.now() > auto_suspended_until:
-                            humidity = float(data.get("humidity", 100))
-                            
-                            if humidity < HUMIDITY_THRESHOLD:
-                                print(f"     [*] AUTO: Soil is dry ({humidity}%). Triggering water pulse.")
-                                send_to_stm32("1")
-                                # Suspend auto-logic for 10 mins to let water sink into the dirt
-                                auto_suspended_until = datetime.now() + timedelta(minutes=COOLDOWN_MINUTES)
+                        commands = automation.process_sensor_data(data)
+                        for command in commands:
+                            print(f"     [AUTO] {command['reason']}")
+
+                            if command["target"] == "valve":
+                                if command["state"] == 1:
+                                    send_to_stm32("1")
+                                else:
+                                    send_to_stm32("0")
+
+                            elif command["target"] == "fan":
+                                if command["state"] == 1:
+                                    send_to_stm32("F")
+                                else:
+                                    send_to_stm32("f")
+
+                            elif command["target"] == "alert":
+                                print("     [ALERT] Water tank is probably empty.")
                                 
                     except json.JSONDecodeError:
                         print("     [!] Invalid JSON received.")

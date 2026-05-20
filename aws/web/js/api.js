@@ -23,8 +23,8 @@ const ROUTES = {
   alerts: `${API_BASE_URL}/api/alerts?limit=10`,
 
   // --- UPDATED COMMAND ROUTES ---
-  pulse: `${API_BASE_URL}/api/command/water`, // Points to the new water route
-  ventilation: `${API_BASE_URL}/api/command/fan`    // Points to the new fan route
+  arrosage: `${API_BASE_URL}/api/command/water`,
+  ventilation: `${API_BASE_URL}/api/command/fan`
 };
 
 const FETCH_TIMEOUT_MS = 5000;
@@ -124,15 +124,18 @@ function adaptReport(doc) {
 }
 
 async function sendCommand(actionneur, etat) {
-  // On choisit la route selon le bouton cliqué
-  const route = actionneur === 'ventilation' ? ROUTES.ventilation : ROUTES.pulse;
-  
-  if (!etat) return true;
+  const route = actionneur === 'ventilation' ? ROUTES.ventilation : ROUTES.arrosage;
 
   try {
-    const res  = await fetchWithTimeout(route, { method: 'POST' });
+    const res = await fetchWithTimeout(route, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ state: etat ? 1 : 0 })
+    });
     const json = await res.json();
-    console.log(`[Cyber-Garden] Commande ${actionneur} envoyée :`, json);
+    console.log(`[Cyber-Garden] Commande ${actionneur} (${etat ? 'ON' : 'OFF'}) envoyée :`, json);
     return json.status === 'success';
   } catch (err) {
     console.warn(`[Cyber-Garden] Échec commande ${actionneur} :`, err.message);
