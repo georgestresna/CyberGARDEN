@@ -196,10 +196,6 @@ async def get_report_1h():
     cursor = db.sensors.find(query)
     sensors = await cursor.to_list(length=1000)
     
-    # Fetch commands sent in the last hour
-    cmd_cursor = db.commands.find(query)
-    commands = await cmd_cursor.to_list(length=100)
-    
     if not sensors:
         return {"date": "Heure écoulée", "message": "Aucune donnée"}
 
@@ -214,9 +210,7 @@ async def get_report_1h():
         "temp_moyenne": avg_temp,
         "humidite_air_moyenne": avg_hum,
         "humidite_sol_moyenne": avg_soil,
-        "luminosite_moyenne": avg_lum,
-        "nb_arrosages": len(commands),
-        "volume_eau_l": round(len(commands) * 0.1, 2)
+        "luminosite_moyenne": avg_lum
     }
 
 ## TEST, LATEST DATA IN DB

@@ -30,7 +30,7 @@ function renderMetrics(capteurs) {
     card.style.setProperty('--card-accent', capteur.accent);
 
     const trendText = capteur.threshold
-      ? `Seuil : ${capteur.threshold} ${capteur.unit}`
+      ? `Seuil : ${capteur.threshold}`
       : `Moy. 1h : ${capteur.avg1h || '—'} ${capteur.unit}`;
 
     card.innerHTML = `
@@ -184,9 +184,7 @@ function renderReport(rapport) {
     ['Température moy.',  rapport.temp_moy],
     ['Humidité air moy.', rapport.hum_air_moy],
     ['Humidité sol moy.', rapport.hum_sol_moy],
-    ['Arrosages',         rapport.arrosages],
-    ['Luminosité moy.',   rapport.luminosite_moy],
-    ['Eau consommée',     rapport.consommation],
+    ['Luminosité moy.',   rapport.luminosite_moy]
   ];
 
   document.getElementById('report-table').innerHTML = rows
