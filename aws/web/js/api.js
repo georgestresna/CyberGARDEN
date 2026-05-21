@@ -155,6 +155,14 @@ async function getData() {
 
     const { capteurs, actionneurs, cuve } = adaptLatest(latestDoc);
 
+    // Inject the 1h averages from the report into the top cards
+    if (reportDoc) {
+      capteurs.temperature.avg1h = reportDoc.temp_moyenne;
+      capteurs.humidite_air.avg1h = reportDoc.humidite_air_moyenne;
+      capteurs.humidite_sol.avg1h = reportDoc.humidite_sol_moyenne;
+      capteurs.luminosite.avg1h = reportDoc.luminosite_moyenne;
+    }
+    
     return {
       capteurs,
       actionneurs,
