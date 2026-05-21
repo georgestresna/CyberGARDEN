@@ -9,6 +9,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY gateway.py .
+COPY automation_logic.py .
 
 # Use -u to see print statements live in the logs
 CMD ["python", "-u", "gateway.py"]

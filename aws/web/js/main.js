@@ -75,6 +75,36 @@ function initSeuilsListener() {
   });
 }
 
+/* ── Toggles actionneurs ─────────────────────────────────────── */
+function initToggleListeners() {
+  const list = document.getElementById('actions-list');
+  if (!list) return;
+
+  list.addEventListener('change', e => {
+    const input = e.target;
+    if (!input.dataset.key) return;
+
+    const key = input.dataset.key;
+    const isOn = input.checked;
+    const subEl = document.getElementById('sub-' + key);
+
+    // Update local UI state
+    if (_data && _data.actionneurs && _data.actionneurs[key]) {
+      _data.actionneurs[key].active = isOn;
+      if (subEl) {
+        subEl.textContent = isOn
+          ? `Mode ${_data.actionneurs[key].mode}`
+          : `Mode ${_data.actionneurs[key].mode} — OFF`;
+      }
+    }
+
+    // Send the command to the API
+    if (typeof sendCommand === 'function') {
+      sendCommand(key, isOn);
+    }
+  });
+}
+
 async function init() {
   try {
     _data = await getData();
