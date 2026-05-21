@@ -80,17 +80,25 @@ def on_message(client, userdata, msg):
         print(f"[*] Manual Fan Override: {'ON' if state == 1 else 'OFF'}")
 
         
+# Add this function right above your MQTT setup
+def on_connect(client, userdata, flags, reason_code, properties):
+    if reason_code == 0:
+        print(f"[*] Successfully connected to AWS Broker!")
+        client.subscribe(MQTT_SUB_TOPIC)
+        print(f"[*] Subscribed to {MQTT_SUB_TOPIC}")
+    else:
+        print(f"[!] Connection failed with code {reason_code}")
+
 # Setup MQTT
 mqtt_client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2, "PiEdgeGateway")
-
 mqtt_client.on_message = on_message
+mqtt_client.on_connect = on_connect  # <-- Add this line!
 
 print(f"[*] Connecting to AWS Broker at {AWS_BROKER}...")
 try:
     mqtt_client.connect(AWS_BROKER, MQTT_PORT)
-    mqtt_client.subscribe(MQTT_SUB_TOPIC) # Start listening for the button!
     mqtt_client.loop_start() 
-    print("[*] AWS Connected & Listening for commands!")
+    # Notice: we removed the old subscribe() and print() from here!
 except Exception as e:
     print(f"[*] AWS Connection failed: {e}")
     exit()
