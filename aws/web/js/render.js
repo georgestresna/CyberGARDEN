@@ -53,22 +53,29 @@ function renderActionneurs(actionneurs, cuve) {
   const list = document.getElementById('actions-list');
   if (list) {
     list.innerHTML = '';
-    Object.entries(actionneurs).forEach(([key, actionneur]) => {
-      const row = document.createElement('div');
-      row.className = 'action-row';
-      const subText = actionneur.active ? `Mode ${actionneur.mode}` : `Mode ${actionneur.mode} — OFF`;
-      row.innerHTML = `
+    if (list) {
+      list.innerHTML = '';
+      Object.entries(actionneurs).forEach(([key, actionneur]) => {
+        const row = document.createElement('div');
+        row.className = 'action-row';
+
+        // CHANGED: Cleaner text logic
+        const subText = actionneur.active ? `Manuel — ON` : `Auto`;
+        const activeClass = actionneur.active ? 'active' : '';
+
+        row.innerHTML = `
         <div class="action-info">
           <div class="action-name">${actionneur.label}</div>
-          <div class="action-sub" id="sub-${key}">${subText}</div>
+          <div class="action-sub ${activeClass}" id="sub-${key}">${subText}</div>
         </div>
         <label class="toggle-wrap">
           <input type="checkbox" data-key="${key}" ${actionneur.active ? 'checked' : ''}>
           <span class="toggle-track"></span>
         </label>
       `;
-      list.appendChild(row);
-    });
+        list.appendChild(row);
+      });
+    }
   }
 
   // 2. Draw the Water Cylinder (keep your existing cylinder code here)

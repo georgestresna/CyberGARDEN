@@ -92,13 +92,19 @@ function initToggleListeners() {
     if (_data && _data.actionneurs && _data.actionneurs[key]) {
       _data.actionneurs[key].active = isOn;
       if (subEl) {
-        subEl.textContent = isOn
-          ? `Mode ${_data.actionneurs[key].mode}`
-          : `Mode ${_data.actionneurs[key].mode} — OFF`;
+        // CHANGED: Update the text cleanly
+        subEl.textContent = isOn ? `Manuel — ON` : `Auto`;
+
+        // ADDED: Make the text turn green when ON
+        if (isOn) {
+          subEl.classList.add('active');
+        } else {
+          subEl.classList.remove('active');
+        }
       }
     }
 
-    // Send the command to the API
+    // Send the command to the API (Untouched logic!)
     if (typeof sendCommand === 'function') {
       sendCommand(key, isOn);
     }
