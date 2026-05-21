@@ -32,9 +32,6 @@ const ROUTES = {
 };
 
 const FETCH_TIMEOUT_MS = 5000;
-const CUVE_DISTANCE_VIDE_CM   = 30;
-const CUVE_DISTANCE_PLEINE_CM = 3;
-const CUVE_LITRES_TOTAL       = 5.0;
 
 const _FALLBACK_DATA = {
   capteurs: {
