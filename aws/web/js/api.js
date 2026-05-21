@@ -2,6 +2,10 @@
    CYBER-GARDEN — js/api.js
 ================================================================ */
 
+const CUVE_DISTANCE_VIDE_CM = 23;   // Distance mesurée quand la cuve est vide
+const CUVE_DISTANCE_PLEINE_CM = 3;    // Distance mesurée quand la cuve est pleine
+const CUVE_LITRES_TOTAL = 1.0;  // Capacité totale de la cuve en litres
+
 const API_BASE_URL = 'http://13.63.71.56:8000';
 
 // const ROUTES = {
@@ -80,6 +84,8 @@ function distanceToPct(distanceCm) {
 
 function adaptLatest(doc) {
   const pct = distanceToPct(doc.distance);
+  const litres_restants = ((pct / 100) * CUVE_LITRES_TOTAL).toFixed(1);
+
   return {
     capteurs: {
       temperature: { label: 'Température', unit: '°C', accent: '#7dce5f', value: doc.temperature ?? null, avg1h: null, status: 'ok', threshold: null },
@@ -92,10 +98,10 @@ function adaptLatest(doc) {
       ventilation: { label: 'Ventilation', active: false, mode: 'auto' },
     },
     cuve: {
-      pct,
-      litres_restants: parseFloat(((pct / 100) * CUVE_LITRES_TOTAL).toFixed(1)),
-      litres_total:    CUVE_LITRES_TOTAL,
-    },
+      pct: pct,
+      litres_restants: litres_restants,
+      litres_total: CUVE_LITRES_TOTAL
+    }
   };
 }
 
@@ -116,6 +122,16 @@ function adaptReport(doc) {
     hum_sol_moy: doc.humidite_sol_moyenne != null ? `${doc.humidite_sol_moyenne} %` : '—',
     luminosite_moy: doc.luminosite_moyenne != null ? `${doc.luminosite_moyenne} lux` : '—'
   };
+}
+
+function distanceToPct(distanceCm) {
+  if (distanceCm == null || distanceCm <= 0) return 0;
+
+  const range = CUVE_DISTANCE_VIDE_CM - CUVE_DISTANCE_PLEINE_CM;
+  const pct = ((CUVE_DISTANCE_VIDE_CM - distanceCm) / range) * 100;
+
+  // Math.max et Math.min empêchent la jauge de dépasser 100% ou de descendre sous 0%
+  return Math.max(0, Math.min(100, Math.round(pct)));
 }
 
 async function sendCommand(actionneur, etat) {
@@ -162,7 +178,7 @@ async function getData() {
       capteurs.humidite_sol.avg1h = reportDoc.humidite_sol_moyenne;
       capteurs.luminosite.avg1h = reportDoc.luminosite_moyenne;
     }
-    
+
     return {
       capteurs,
       actionneurs,
